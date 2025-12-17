@@ -1,5 +1,5 @@
 ﻿/*
- * The Fitness App
+ * ZenMove - The Ultimate Fitness App
  *
  * IT-påbyggnad Utvecklare (Lexicon)
  * Kursvecka 13-16 (vv.2551-2602)
