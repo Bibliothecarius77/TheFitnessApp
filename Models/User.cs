@@ -22,8 +22,8 @@ namespace TheFitnessApp.Models
         [Key]                                              // EF Core - DB Primary Key
         public int UserID { get; set; }
         public UserRole Role { get; set; }
-        public string Email { get; set; }
-        public string PasswordHash { get; set; }
+        public string Email { get; set; } //ska  email vara required att det måste finnas?   public required string Email { get; set; } 
+        public string PasswordHash { get; set; } // samma sak här,  public required string PasswordHash { get; set; } 
         public DateTime CreationDate { get; set; }
 
         public User()
