@@ -24,7 +24,7 @@ namespace TheFitnessApp.Models
         [ForeignKey(nameof(WorkoutSession))]               // EF Core - DB Foreign Key
         public int SessionID { get; set; }
         public ExerciseType Type { get; set; }
-        public string Category { get; set; }
+        public string? Category { get; set; }
         public int Sets { get; set; }
         public int Reps { get; set; }
         public int WeightKG { get; set; }

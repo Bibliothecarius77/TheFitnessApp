@@ -13,7 +13,6 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Reflection.Metadata;
 
 namespace TheFitnessApp.Models
 {
@@ -26,12 +25,14 @@ namespace TheFitnessApp.Models
         public int UserID { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string Notes { get; set; } //public string? Notes { get; set; } För att undvika null-problem. Notes är frivilligt.
+        public string? Notes { get; set; }
 
         private List<WorkoutSession> listSessions;
 
         public WorkoutSchedule()
         {
+            listSessions = new List<WorkoutSession>();
+
             // Add content here
         }
 
