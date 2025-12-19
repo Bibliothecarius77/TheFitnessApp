@@ -1,8 +1,31 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "ZenMove";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="d-flex justify-content-center align-items-center" style="height:100vh;">
+    <div class="zenmove-card text-center p-4">
+        
+        <!-- ZenMove logga -->
+        <div class="text-center mb-4">
+            <img src="/images/Zenmove-logo.jpg" alt="ZenMove logo" class="zenmove-logo img-fluid" />
+        </div>
+
+        <!-- Login -->
+        <form asp-controller="Account" asp-action="Login" method="post" class="mb-4">
+            <input type="email" name="Email" class="form-control mb-2" placeholder="Email" required>
+            <input type="password" name="Password" class="form-control mb-3" placeholder="Lösenord" required>
+            <button type="submit" class="btn btn-primary w-100">Logga in</button>
+        </form>
+
+        <hr class="my-3">
+
+        <!-- Registrering -->
+        <form asp-controller="Account" asp-action="Register" method="post">
+            <input type="text" name="FirstName" class="form-control mb-2" placeholder="Förnamn" required>
+            <input type="text" name="LastName" class="form-control mb-2" placeholder="Efternamn" required>
+            <input type="email" name="Email" class="form-control mb-2" placeholder="Email" required>
+            <input type="password" name="Password" class="form-control mb-3" placeholder="Lösenord" required>
+            <button type="submit" class="btn btn-primary w-100">Registrera</button>
+        </form>
+    </div>
 </div>

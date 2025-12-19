@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using TheFitnessApp.Models;
+using TheFitnessApp.Models; // ändrat till deras namespace
 
-namespace TheFitnessApp.Controllers
+namespace TheFitnessApp.Controllers // ändrat till deras namespace
 {
     public class HomeController : Controller
     {
