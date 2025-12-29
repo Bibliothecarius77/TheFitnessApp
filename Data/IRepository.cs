@@ -15,15 +15,15 @@ namespace TheFitnessApp.Data
 {
     public interface IRepository<T> where T : class
     {
-        //IEnumerable<T> Get();
+        IEnumerable<T> Get();
         Task<IEnumerable<T>> GetAsync();
-        //T? GetByID(int id);
+        T? GetByID(int id);
         Task<T?> GetByIDAsync(int id);
-        //void Insert(T entity);
+        void Insert(T entity);
         Task InsertAsync(T entity);
-        //void Delete(int id);
+        void Delete(int id);
         Task DeleteAsync(int id);
-        //void Update(T entity);
+        void Update(T entity);
         Task UpdateAsync(T entity);
     }
 }

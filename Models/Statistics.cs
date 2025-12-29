@@ -1,4 +1,4 @@
-﻿/*
+/*
  * ZenMove - The Ultimate Fitness App
  *
  * IT-påbyggnad Utvecklare (Lexicon)
@@ -24,7 +24,7 @@ namespace TheFitnessApp.Models
         [ForeignKey(nameof(User))]                         // EF Core - DB Foreign Key
         public int UserID { get; set; }
         public DateTime PeriodStart { get; set; }
-        public DateTime PeriodEnd{ get; set; }
+        public DateTime PeriodEnd { get; set; }
         public int TotalWorkouts { get; set; }
         public int TotalDurationMin { get; set; }
         public int TotalCaloriesBurnt { get; set; }

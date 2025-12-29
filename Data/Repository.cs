@@ -1,4 +1,4 @@
-﻿/*
+/*
  * ZenMove - The Ultimate Fitness App
  *
  * IT-påbyggnad Utvecklare (Lexicon)
@@ -11,16 +11,16 @@
  *   Victoria Rådberg
  */
 
+using Microsoft.EntityFrameworkCore;
+
 namespace TheFitnessApp.Data
 {
-    public class WorkoutRepository
-    //public class WorkoutRepository : IRepository<T>
+    public class Repository<T> : IRepository<T> where T : class
     {
-/*
-        private readonly WorkoutContext _context;
+        private readonly GeneralContext _context;
         private readonly DbSet<T> _dbSet;
 
-        public WorkoutRepository(WorkoutContext dbContext)
+        public Repository(GeneralContext dbContext)
         {
             _context = dbContext;
             _dbSet = _context.Set<T>();
@@ -89,6 +89,5 @@ namespace TheFitnessApp.Data
 
             await _context.SaveChangesAsync();
         }
-*/
     }
 }
