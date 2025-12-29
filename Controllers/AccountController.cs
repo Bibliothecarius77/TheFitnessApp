@@ -1,35 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace TheFitnessApp.Controllers
+namespace TheFitnessApp_1.Controllers
 {
     public class AccountController : Controller
     {
-        // GET: /Account/Login
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        // POST: /Account/Login
         [HttpPost]
-        public IActionResult Login(string Email, string Password)
+        public IActionResult Login(string email, string password)
         {
-            // TODO: backend-teamet implementerar validering mot databasen
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Welcome", "Home");
         }
 
-        // GET: /Account/Register
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        // POST: /Account/Register
         [HttpPost]
-        public IActionResult Register(string FirstName, string LastName, string Email, string Password)
+        public IActionResult Register(string firstName, string lastName, string email, string password)
         {
-            // TODO: backend-teamet implementerar skapande av ny användare
-            return RedirectToAction("Login");
+            return RedirectToAction("Welcome", "Home");
         }
     }
 }

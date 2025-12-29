@@ -54,10 +54,17 @@ namespace TheFitnessApp
 
             app.UseAuthorization();
 
-            // Standard MVC routing
+            // ROUTING
+            // Steg 1 – Index är startsidan
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            // Steg 2 – Welcome (dashboard)
+            app.MapControllerRoute(
+                name: "welcome",
+                pattern: "welcome",
+                defaults: new { controller = "Home", action = "Welcome" });
 
             // Ingen Razor Pages här – du jobbar bara med Views
             app.Run();
