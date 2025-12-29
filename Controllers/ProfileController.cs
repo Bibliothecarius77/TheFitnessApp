@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TheFitnessApp.Data;
+using TheFitnessApp.Models;
 
 namespace TheFitnessApp.Controllers
 {
     // Controller för användarens profil
     public class ProfileController : Controller
     {
-        private readonly ApplicationDbContext _context;  // Databaskontext (ersätts senare av Repository)
+        private readonly ApplicationDbContext _context;
 
-        // Konstruktor med Dependency Injection,// ASP.NET Core skickar in ApplicationDbContext automatiskt.
+        // Konstruktor med Dependency Injection
         public ProfileController(ApplicationDbContext context)
         {
             _context = context;
@@ -18,8 +19,38 @@ namespace TheFitnessApp.Controllers
         // Visar användarens profil
         public IActionResult Index()
         {
-            // TODO: Hämta användarens profilinformation via Repository
-            return View();
+            var profile = new UserProfile
+            {
+                FirstName = "Test",
+                LastName = "User",
+                AddrCity = "Stockholm",
+                AddrCountry = "Sweden",
+                DateOfBirth = new DateTime(1995, 1, 1),
+                HeightCM = 170,
+                WeightKG = 65
+            };
+
+            return View(profile);
+        }
+
+        // GET: /Profile/Goals
+        // Visar användarens träningsmål
+        public IActionResult Goals()
+        {
+            // Tillfälliga testmål tills Repository är klart
+            var goals = new List<WorkoutGoal>
+            {
+                new WorkoutGoal
+                {
+                    GoalID = 1,
+                    Type = GoalType.WeightLoss,
+                    TargetValue = 10,
+                    Deadline = DateTime.Now.AddMonths(1),
+                    IsCompleted = false
+                }
+            };
+
+            return View(goals);
         }
 
         // GET: /Profile/Statistics
@@ -27,14 +58,6 @@ namespace TheFitnessApp.Controllers
         public IActionResult Statistics()
         {
             // TODO: Hämta användarens statistik via Repository
-            return View();
-        }
-
-        // GET: /Profile/Goals
-        // Visar användarens träningsmål
-        public IActionResult Goals()
-        {
-            // TODO: Hämta användarens träningsmål via Repository
             return View();
         }
     }

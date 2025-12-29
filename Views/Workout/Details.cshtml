@@ -1,0 +1,59 @@
+﻿@model TheFitnessApp.Models.WorkoutSession
+@* Kopplar vyn till modellen WorkoutSession *@
+
+@{
+    ViewData["Title"] = "Workout Details";
+}
+
+<!--
+    Bootstrap container:
+    - Begränsar bredden på innehållet
+    - Ger luft runt sidan
+-->
+<div class="container mt-5">
+
+    <!-- Centrerar innehållet horisontellt -->
+    <div class="row justify-content-center">
+
+        <!-- Gör innehållet smalare och mer läsbart -->
+        <div class="col-md-6">
+
+            <!-- Sidrubrik -->
+            <h1>Workout Details</h1>
+
+            <!-- Förklarande text (skelett) -->
+            <p>
+                Här visas detaljer för ett träningspass.
+            </p>
+
+            <p>
+                (Denna sida används tillsammans med ett ID, t.ex. /Workout/Details/1)
+            </p>
+
+            <!--
+                Platshållare för träningspassets information
+                Kopplas till riktig data senare via Controller + Repository
+            -->
+            <ul class="list-group mb-4">
+                <li class="list-group-item">
+                    <strong>Schedule ID:</strong> (kommer visas här)
+                </li>
+                <li class="list-group-item">
+                    <strong>Start Time:</strong> (kommer visas här)
+                </li>
+                <li class="list-group-item">
+                    <strong>End Time:</strong> (kommer visas här)
+                </li>
+                <li class="list-group-item">
+                    <strong>Total Calories:</strong> (kommer visas här)
+                </li>
+            </ul>
+
+            <!-- Navigationsknapp tillbaka till listan -->
+            <a asp-action="Index" class="btn btn-secondary">
+                Back to list
+            </a>
+
+        </div>
+    </div>
+</div>

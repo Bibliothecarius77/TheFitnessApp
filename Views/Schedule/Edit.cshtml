@@ -1,0 +1,58 @@
+﻿@model TheFitnessApp.Models.WorkoutSchedule
+@* Redigerar ett befintligt träningsschema *@
+
+@{
+    ViewData["Title"] = "Edit Schedule";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <h1 class="mb-4">Edit Workout Schedule</h1>
+
+            <form asp-action="Edit" method="post">
+
+                @* Skickar med ID dolt *@
+                <input type="hidden" asp-for="ScheduleID" />
+
+                <!-- Start Date -->
+                <div class="mb-3">
+                    <label asp-for="StartDate" class="form-label"></label>
+                    <input asp-for="StartDate"
+                           type="date"
+                           class="form-control" />
+                </div>
+
+                <!-- End Date -->
+                <div class="mb-3">
+                    <label asp-for="EndDate" class="form-label"></label>
+                    <input asp-for="EndDate"
+                           type="date"
+                           class="form-control" />
+                </div>
+
+                <!-- Notes -->
+                <div class="mb-3">
+                    <label asp-for="Notes" class="form-label"></label>
+                    <textarea asp-for="Notes"
+                              class="form-control"
+                              rows="3"></textarea>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-primary">
+                        Save Changes
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

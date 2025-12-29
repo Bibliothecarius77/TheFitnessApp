@@ -11,6 +11,7 @@ namespace TheFitnessApp.Controllers
         private readonly ApplicationDbContext _context;
 
         // Konstruktor med Dependency Injection
+        // ASP.NET Core skickar in ApplicationDbContext automatiskt
         public GoalController(ApplicationDbContext context)
         {
             _context = context;
@@ -22,20 +23,31 @@ namespace TheFitnessApp.Controllers
         {
             // TODO: Hämta data via Repository när det är implementerat
 
-            // Visar vyn: Views/Goal/Index.cshtml tills Repository-logiken är implementerad
+            // Just nu visas endast vyn (skelett)
             return View();
         }
 
-        
+
         // READ – visa detaljer för ett mål
         // GET: /Goal/Details/{id}
         public IActionResult Details(int id)
         {
-            // TODO: Hämta specifikt mål via Repository
-            return View();
+            // TEMPORÄRT testobjekt tills Repository är klart
+            var goal = new WorkoutGoal
+            {
+                GoalID = id,
+                UserID = 1,
+                Type = GoalType.WeightLoss,
+                TargetValue = 10,
+                Deadline = DateTime.Now.AddMonths(1),
+                IsCompleted = false
+            };
+
+            return View(goal);
         }
 
-        
+
+
         // CREATE – visa formulär
         // GET: /Goal/Create
         public IActionResult Create()
@@ -54,17 +66,25 @@ namespace TheFitnessApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        
+
         // UPDATE – visa formulär för redigering
         // GET: /Goal/Edit/{id}
-        
         public IActionResult Edit(int id)
         {
-            // TODO: Hämta valt träningsmål via Repository
-            return View();
+            // TEMPORÄRT testobjekt
+            var goal = new WorkoutGoal
+            {
+                GoalID = id,
+                Type = GoalType.WeightLoss,
+                TargetValue = 10,
+                Deadline = DateTime.Now.AddMonths(1),
+                IsCompleted = false
+            };
+
+            return View(goal);
         }
 
-       
+
         // UPDATE – spara ändringar
         // POST: /Goal/Edit/{id}
         [HttpPost]
@@ -75,16 +95,25 @@ namespace TheFitnessApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        
+
         // DELETE – visa bekräftelse
         // GET: /Goal/Delete/{id}
         public IActionResult Delete(int id)
         {
-            // TODO: Hämta träningsmål för bekräftelse via Repository
-            return View();
+            // TEMPORÄRT testobjekt
+            var goal = new WorkoutGoal
+            {
+                GoalID = id,
+                Type = GoalType.WeightLoss,
+                TargetValue = 10,
+                Deadline = DateTime.Now.AddMonths(1),
+                IsCompleted = false
+            };
+
+            return View(goal);
         }
 
-        
+
         // DELETE – ta bort mål
         // POST: /Goal/DeleteConfirmed/{id}
         [HttpPost]

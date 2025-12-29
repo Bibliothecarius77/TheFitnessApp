@@ -20,23 +20,48 @@ namespace TheFitnessApp.Controllers
         // Hämtar alla träningsscheman från databasen
         public IActionResult Index()
         {
-            // TODO: Hämta träningsscheman via Repository när det är implementerat
-            // Tillfälligt returneras endast vyn
-            return View();
+            // Tillfällig testdata (utan databas)
+            var schedules = new List<WorkoutSchedule>
+    {
+        new WorkoutSchedule
+        {
+            ScheduleID = 1,
+            StartDate = DateTime.Today,
+            EndDate = DateTime.Today.AddDays(7),
+            Notes = "Test schedule – Week 1"
+        },
+        new WorkoutSchedule
+        {
+            ScheduleID = 2,
+            StartDate = DateTime.Today.AddDays(7),
+            EndDate = DateTime.Today.AddDays(14),
+            Notes = "Test schedule – Week 2"
+        }
+    };
+
+            return View(schedules);
         }
 
-        
+
+
         // READ – visa detaljer för ett schema
-        // GET: /Schedule/Details/{id}
-       
+        // GET: /Schedule/Details/{id} 
+        //Tillfällig lösning för att visa detaljer för ett träningsschema baserat på ID
         public IActionResult Details(int id)
         {
-            // TODO: Hämta specifikt schema via Repository baserat på id
-            return View();
+            var schedule = new WorkoutSchedule
+            {
+                ScheduleID = id,
+                StartDate = DateTime.Today,
+                EndDate = DateTime.Today.AddDays(7),
+                Notes = "Test schedule"
+            };
+
+            return View(schedule);
         }
 
         // GET: /Schedule/Create
-       
+
         public IActionResult Create()
         {
             // Visar formulär för att skapa ett nytt schema
@@ -56,16 +81,24 @@ namespace TheFitnessApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-      
+
         // UPDATE – visa formulär för redigering
         // GET: /Schedule/Edit/{id}
+        // tillfällig lösning för att visa redigeringsformulär för ett träningsschema baserat på ID
         public IActionResult Edit(int id)
         {
-            // TODO: Hämta valt schema via Repository
-            return View();
+            var schedule = new WorkoutSchedule
+            {
+                ScheduleID = id,
+                StartDate = DateTime.Today,
+                EndDate = DateTime.Today.AddDays(7),
+                Notes = "Editable test schedule"
+            };
+
+            return View(schedule);
         }
 
-       
+
         // UPDATE – spara ändringar
         // POST: /Schedule/Edit/{id}
         [HttpPost]
@@ -76,14 +109,22 @@ namespace TheFitnessApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        
+
         // DELETE – visa bekräftelse
         // GET: /Schedule/Delete/{id}
-  
+        // tillfällig lösning för att visa bekräftelsesidan för att ta bort ett träningsschema baserat på ID
+
         public IActionResult Delete(int id)
         {
-            // TODO: Hämta schema för bekräftelse via Repository
-            return View();
+            var schedule = new WorkoutSchedule
+            {
+                ScheduleID = id,
+                StartDate = DateTime.Today,
+                EndDate = DateTime.Today.AddDays(7),
+                Notes = "Schedule to be deleted"
+            };
+
+            return View(schedule);
         }
 
 

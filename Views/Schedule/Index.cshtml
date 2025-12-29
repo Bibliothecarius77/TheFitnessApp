@@ -1,0 +1,60 @@
+﻿@model IEnumerable<TheFitnessApp.Models.WorkoutSchedule>
+
+@{
+    ViewData["Title"] = "Workout Schedules";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <h1 class="mb-4">Workout Schedules</h1>
+
+            <a asp-action="Create"
+               class="btn btn-success mb-3">
+                Create New Schedule
+            </a>
+
+            <ul class="list-group mb-4">
+                @foreach (var schedule in Model)
+                {
+                    <li class="list-group-item">
+                        <strong>Period:</strong>
+                        @schedule.StartDate.ToShortDateString()
+                        -
+                        @schedule.EndDate.ToShortDateString()
+                        <br />
+
+                        <strong>Notes:</strong> @schedule.Notes
+                        <br /><br />
+
+                        <a asp-action="Details"
+                           asp-route-id="@schedule.ScheduleID"
+                           class="btn btn-sm btn-primary">
+                            Details
+                        </a>
+
+                        <a asp-action="Edit"
+                           asp-route-id="@schedule.ScheduleID"
+                           class="btn btn-sm btn-warning ms-1">
+                            Edit
+                        </a>
+
+                        <a asp-action="Delete"
+                           asp-route-id="@schedule.ScheduleID"
+                           class="btn btn-sm btn-danger ms-1">
+                            Delete
+                        </a>
+                    </li>
+                }
+            </ul>
+
+            <a asp-controller="Profile"
+               asp-action="Index"
+               class="btn btn-secondary">
+                Back to profile
+            </a>
+
+        </div>
+    </div>
+</div>

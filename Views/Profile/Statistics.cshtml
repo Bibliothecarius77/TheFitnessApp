@@ -1,0 +1,27 @@
+﻿@{
+    // Sätter sidans titel
+    ViewData["Title"] = "Statistics";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            @* Rubrik för statistik-sidan *@
+            <h1 class="mb-4">Training Statistics</h1>
+
+            @* Tillfällig text tills statistik hämtas från databasen *@
+            <p>
+                User statistics will be displayed here.
+            </p>
+
+            @* Navigering tillbaka till profilsidan *@
+            <a asp-action="Index"
+               asp-controller="Profile"
+               class="btn btn-secondary">
+                Back to profile
+            </a>
+
+        </div>
+    </div>
+</div>

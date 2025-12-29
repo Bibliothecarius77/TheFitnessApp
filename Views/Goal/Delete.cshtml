@@ -1,0 +1,49 @@
+﻿@model TheFitnessApp.Models.WorkoutGoal
+@* Kopplar vyn till modellen WorkoutGoal *@
+
+@{
+    ViewData["Title"] = "Delete Goal";
+}
+
+<!-- Bootstrap-container för att centrera innehållet och begränsa bredden -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <!-- Rubrik i röd färg för att tydligt visa att detta är en delete-sida -->
+            <h1 class="text-danger mb-4">Delete Goal</h1>
+
+            <!-- Bekräftelsetext till användaren -->
+            <p>
+                Är du säker på att du vill ta bort detta mål?
+            </p>
+
+            <!--
+                Formulär:
+                - Skickas via POST
+                - Går till DeleteConfirmed-metoden i GoalController
+            -->
+            <form asp-action="DeleteConfirmed" method="post">
+
+                <!--
+                    Hidden ID (viktigt!)
+                    - Skickar med GoalID till controllern
+                    - Används för att veta vilket mål som ska tas bort
+                -->
+                <input type="hidden" asp-for="GoalID" />
+
+                <!-- Bekräfta borttagning -->
+                <button type="submit" class="btn btn-danger">
+                    Delete
+                </button>
+
+                <!-- Avbryt och gå tillbaka till listan -->
+                <a asp-action="Index" class="btn btn-secondary ms-2">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+</div>
