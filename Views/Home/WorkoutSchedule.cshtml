@@ -35,9 +35,15 @@ else
         <!-- Title -->
         <div class="row mb-4">
             <div class="col">
-                <h2 class="fw-medium">MY Workout</h2>
-                <h1 class="fw-bold text-muted">Schedule</h1>
-
+                <div class="d-flex">
+                    <div class="me-5">
+                        <h2 class="fw-medium">MY Workout</h2>
+                        <h1 class="fw-bold text-muted">Schedule</h1>
+                    </div>
+                    <img src="/images/Zenmove-logo.jpg" 
+                       class="rounded-4 mb-2"
+                       style="max-width: 92px;" />
+                </div>
                 <p class="text-muted">
                     <strong>Start:</strong> @Model.StartDate.ToShortDateString() 
                     <span class="mx-1">|</span>

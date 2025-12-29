@@ -2,6 +2,8 @@
 @{
     Layout = "_FullscreenModalLayout";
     ViewData["Title"] = "Upcoming Workouts";
+    var history = Model.GetHistory();
+    bool hasHistory = history != null && history.Any();
 }
 
 <!-- Upcoming Sessions -->
@@ -11,7 +13,7 @@
     <h3>Upcoming Workouts</h4>
   </div>
             
-  @if (Model.GetUpcoming().Any())
+  @if (hasHistory)
   {
     <table class="mt-4 table table-hover 
       table-bordered text-white table-sm">
