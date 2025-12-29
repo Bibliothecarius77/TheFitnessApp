@@ -1,0 +1,54 @@
+@model TheFitnessApp.Models.WorkoutSchedule
+
+@{
+  Layout = "_FullscreenModalLayout";
+  ViewData["Title"] = "History Workouts";
+}
+
+<!-- Past Sessions -->
+<div class="row mb-3">
+  <div class="text-center text-white rounded-3 mb-4 p-3"
+    style="background: linear-gradient(135deg,#7b61ff,#157432);">
+    <h3>History Workouts</h3>
+  </div>
+
+  @if (Model.GetHistory().Any())
+  {
+    <table class="mt-4 table table-hover 
+      table-bordered text-white table-sm">
+      <thead class="table-dark">
+        <tr class="text-nowrap" style="font-size: 0.8rem;">
+          <th>Date</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Duration</th>
+          <th>Calories Burned</th>
+        </tr>
+      </thead>
+    <tbody>
+    @foreach (var session in Model.GetHistory())
+    {
+      <tr class="text-nowrap" style="font-size: 0.8rem;">
+        <td class="text-muted">@session.StartTime.ToShortDateString()</td>
+        <td class="text-muted">@session.StartTime.ToShortTimeString()</td>
+        <td class="text-muted">@session.EndTime.ToShortTimeString()</td>
+        <td class="text-muted">@((int)(session.EndTime - session.StartTime).TotalMinutes) mins</td>
+        <td class="fw-bold text-danger">@session.TotalCalories kcal</td>
+      </tr>
+    }
+    </tbody>
+  </table>
+  }
+  else
+  {
+    <div class="alert alert-secondary text-center">
+      No workout history available.
+    </div>
+  }
+
+  <a asp-action="WorkoutSchedule" asp-controller="Home"
+    class="btn btn-secondary mt-5 rounded-pill">
+    ← Back to Schedule
+  </a>
+
+</div>
