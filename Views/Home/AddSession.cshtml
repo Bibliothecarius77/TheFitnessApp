@@ -6,10 +6,10 @@
 }
 @{
   //Note: Add this to the controller later
-  //ViewBag.ScheduleStart = schedule.StartDate;
-  //ViewBag.ScheduleEnd = schedule.EndDate;
-  ViewBag.ScheduleStart = DateTime.Now.Date;
-  ViewBag.ScheduleEnd = DateTime.Now.Date.AddMonths(1);
+  ViewBag.ScheduleStart = schedule.StartDate;
+  ViewBag.ScheduleEnd = schedule.EndDate;
+  //ViewBag.ScheduleStart = DateTime.Now.Date;
+  //ViewBag.ScheduleEnd = DateTime.Now.Date.AddMonths(1);
     
   var minDate = ((DateTime)ViewBag.ScheduleStart)
     .ToString("yyyy-MM-ddTHH:mm");
