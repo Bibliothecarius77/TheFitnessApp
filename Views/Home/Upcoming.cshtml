@@ -1,0 +1,64 @@
+@model TheFitnessApp.Models.WorkoutSchedule
+@{
+    Layout = "_FullscreenModalLayout";
+    ViewData["Title"] = "Upcoming Workouts";
+    var history = Model.GetHistory();
+    bool hasHistory = history != null && history.Any();
+}
+
+<!-- Upcoming Sessions -->
+<div class="row mb-3">
+  <div class="text-center text-white rounded-3 mb-4 p-3"
+  style="background: linear-gradient(135deg,#7b61ff,#157432);">
+    <h3>Upcoming Workouts</h4>
+  </div>
+            
+  @if (hasHistory)
+  {
+    <table class="mt-4 table table-hover 
+      table-bordered text-white table-sm">
+      <thead class="table-dark">
+        <tr class="text-nowrap" style="font-size: 0.8rem;">
+            <th>Date</th>
+            <th>Time</th>
+            <th>Duration</th>
+            <th>Calories</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+      <tbody>
+      @foreach (var session in Model.GetUpcoming())
+      {
+        <tr class="text-nowrap" style="font-size: 0.8rem;">
+          <td>@session.StartTime.ToShortDateString()</td>
+          <td>@session.StartTime.ToShortTimeString()-@session.EndTime.ToShortTimeString()</td>
+          <td>@((int)(session.EndTime - session.StartTime).TotalMinutes) mins</td>
+          <td class="fw-bold text-danger">@session.TotalCalories kcal</td>
+          <td>
+            <a asp-action="EditSession" asp-route-id="@session.SessionID" 
+              class="btn btn-sm btn-outline-primary" style="font-size: 0.75rem;">
+              Edit
+            </a>
+            <a asp-action="DeleteSession" asp-route-id="@session.SessionID" 
+              class="btn btn-sm btn-outline-danger" style="font-size: 0.75rem;">
+              Delete
+            </a>
+          </td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  }
+  else
+  {
+    <div class="alert alert-info text-center">
+      No upcoming workouts scheduled.
+    </div>
+  }
+
+  <a asp-action="WorkoutSchedule" asp-controller="Home"
+    class="btn btn-secondary mt-5 rounded-pill">
+    ← Back to Schedule
+  </a>
+
+</div>

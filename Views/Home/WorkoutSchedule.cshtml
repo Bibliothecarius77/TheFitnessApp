@@ -1,0 +1,91 @@
+@model TheFitnessApp.Models.WorkoutSchedule
+@{
+    Layout = "_FullscreenModalLayout";
+    ViewData["Title"] = "Workout Schedule";
+    bool isExpired = Model != null && Model.EndDate < DateTime.Today;
+} 
+
+@if (Model == null || isExpired)
+{
+    <div class="container my-4">
+        <div class="text-center ">
+            <h4 class="alert alert-warning rounded-4 mb-3">
+                No Active Workout Schedule
+            </h4>
+
+            @if (Model == null)
+            {
+                <p>You don't have a workout schedule yet.</p>
+            }
+            else
+            {
+                <p>Your previous workout schedule has expired.</p>
+            }
+
+            <a asp-action="CreateSchedule" asp-controller="Home"
+               class="btn btn-primary px-4 rounded-pill mt-3">
+                + Create Workout Schedule
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container my-5">
+        <!-- Title -->
+        <div class="row mb-4">
+            <div class="col">
+                <div class="d-flex">
+                    <div class="me-5">
+                        <h2 class="fw-medium">MY Workout</h2>
+                        <h1 class="fw-bold text-muted">Schedule</h1>
+                    </div>
+                    <img src="/images/Zenmove-logo.jpg" 
+                       class="rounded-4 mb-2"
+                       style="max-width: 92px;" />
+                </div>
+                <p class="text-muted">
+                    <strong>Start:</strong> @Model.StartDate.ToShortDateString() 
+                    <span class="mx-1">|</span>
+                    <strong>End:</strong> @Model.EndDate.ToShortDateString()
+                </p>
+            </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="row mb-5">
+            <div class="col">
+                <div class="card shadow rounded-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Notes</h5>
+                        <p class="card-text fst-italic">@Model.Notes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="row mt-5">
+            <div class="col text-center d-flex justify-content-center gap-3">
+
+                <a asp-action="Upcoming" asp-controller="Home"
+                   asp-route-id="@Model.ScheduleID"
+                   class="btn btn-primary px-3 rounded-pill">
+                   Upcoming Workouts
+                </a>
+
+                <a asp-action="History" asp-controller="Home"
+                   asp-route-id="@Model.ScheduleID"
+                   class="btn btn-outline-secondary px-3 rounded-pill">
+                   Workout History
+                </a>
+
+                <a asp-action="AddSession" asp-controller="Home" 
+                   asp-route-id="@Model.ScheduleID" 
+                   class="btn btn-success px-3 rounded-pill">
+                   + Add Sessions
+                </a>
+            </div>
+        </div>
+    </div>
+}
