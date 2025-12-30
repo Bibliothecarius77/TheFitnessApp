@@ -1,0 +1,40 @@
+﻿@model TheFitnessApp.Models.WorkoutSession
+@* Kopplar vyn till WorkoutSession *@
+
+@{
+    ViewData["Title"] = "Delete Workout Session";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <h1>Delete Workout Session</h1>
+
+            <p>
+                Är du säker på att du vill ta bort detta träningspass?
+            </p>
+
+            <!--
+                FORM:
+                När man klickar på Delete skickas POST till Delete
+                (kommer kopplas till riktig logik senare)
+            -->
+            <form asp-action="Delete" method="post">
+
+                <!-- Skickar ID (kommer användas senare) -->
+                <input type="hidden" asp-for="SessionID" />
+
+                <button type="submit" class="btn btn-danger">
+                    Delete
+                </button>
+
+                <a asp-action="Index" class="btn btn-secondary ms-2">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+</div>

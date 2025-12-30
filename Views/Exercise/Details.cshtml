@@ -1,0 +1,60 @@
+﻿@model TheFitnessApp.Models.Exercise
+@* Kopplar vyn till en specifik Exercise *@
+
+@{
+    ViewData["Title"] = "Exercise Details";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <h1 class="mb-4">Exercise Details</h1>
+
+            <ul class="list-group mb-4">
+
+                <li class="list-group-item">
+                    <strong>Session ID:</strong> @Model.SessionID
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Type:</strong> @Model.Type
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Category:</strong> @Model.Category
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Sets:</strong> @Model.Sets
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Reps:</strong> @Model.Reps
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Weight (kg):</strong> @Model.WeightKG
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Calories Burnt:</strong> @Model.CaloriesBurnt
+                </li>
+
+                <li class="list-group-item">
+                    <strong>MET Value:</strong> @Model.METValue
+                </li>
+
+            </ul>
+
+            <a asp-action="Edit" asp-route-id="@Model.ExerciseID" class="btn btn-warning">
+                Edit
+            </a>
+
+            <a asp-action="Index" class="btn btn-secondary ms-2">
+                Back to list
+            </a>
+
+        </div>
+    </div>
+</div>

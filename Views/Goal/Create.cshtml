@@ -1,0 +1,54 @@
+﻿@model TheFitnessApp.Models.WorkoutGoal
+@* Kopplar vyn till WorkoutGoal *@
+
+@{
+    ViewData["Title"] = "Create Goal";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <h1 class="mb-4">Create Goal</h1>
+
+            <form asp-action="Create" method="post">
+
+                <!-- Goal Type (ENUM dropdown) -->
+                <div class="mb-3">
+                    <label asp-for="Type" class="form-label"></label>
+                    <select asp-for="Type"
+                            class="form-select"
+                            asp-items="Html.GetEnumSelectList<GoalType>()">
+                        <option value="">-- Select goal type --</option>
+                    </select>
+                </div>
+
+                <!-- Target Value -->
+                <div class="mb-3">
+                    <label asp-for="TargetValue" class="form-label"></label>
+                    <input asp-for="TargetValue" class="form-control" />
+                </div>
+
+                <!-- Deadline -->
+                <div class="mb-3">
+                    <label asp-for="Deadline" class="form-label"></label>
+                    <input asp-for="Deadline" type="date" class="form-control" />
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="btn btn-primary w-100 mb-2">
+                    Save Goal
+                </button>
+
+                @* Tillbaka till Profile → Goals *@
+                <a asp-controller="Profile"
+                   asp-action="Goals"
+                   class="btn btn-secondary w-100">
+                    Back to Goals
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+</div>
