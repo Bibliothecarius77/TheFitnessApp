@@ -26,10 +26,12 @@ namespace TheFitnessApp.Models
         public GoalType Type { get; set; }
         public int TargetValue { get; set; }
         public DateTime Deadline { get; set; }
-        public bool IsCompleted { get; set; }
+        public required bool IsCompleted { get; set; }
 
         public WorkoutGoal()
         {
+            IsCompleted = false;
+
             // Add content here
         }
 

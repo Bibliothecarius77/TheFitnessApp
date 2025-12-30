@@ -4,9 +4,46 @@
 * text=auto
 
 ###############################################################################
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout, but always with UTF-8 character encoding.
+###############################################################################
+*.c       text   encoding=utf-8
+*.cpp     text   encoding=utf-8
+*.cs      text   encoding=utf-8
+*.cshtml  text   encoding=utf-8
+*.css     text   encoding=utf-8
+*.h       text   encoding=utf-8
+*.html    text   encoding=utf-8
+*.js      text   encoding=utf-8
+*.json    text   encoding=utf-8
+*.jsx     text   encoding=utf-8
+*.map     text   encoding=utf-8
+*.txt     text   encoding=utf-8
+
+###############################################################################
+# behavior for image files
+#
+# image files are treated as binary by default.
+###############################################################################
+*.avi   binary
+*.eps   binary
+*.gif   binary
+*.ico   binary
+*.jpg   binary
+*.mkv   binary
+*.mov   binary
+*.mp3   binary
+*.mp4   binary
+*.mpg   binary
+*.ogg   binary
+*.png   binary
+*.svg   binary
+*.webp  binary
+
+###############################################################################
 # Set default behavior for command prompt diff.
 #
-# This is need for earlier builds of msysgit that does not have it on by
+# This is needed for earlier builds of msysgit that does not have it on by
 # default for csharp files.
 # Note: This is only used by command line
 ###############################################################################
@@ -34,15 +71,6 @@
 #*.modelproj merge=binary
 #*.sqlproj   merge=binary
 #*.wwaproj   merge=binary
-
-###############################################################################
-# behavior for image files
-#
-# image files are treated as binary by default.
-###############################################################################
-#*.jpg   binary
-#*.png   binary
-#*.gif   binary
 
 ###############################################################################
 # diff behavior for common document formats

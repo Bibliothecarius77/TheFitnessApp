@@ -1,0 +1,47 @@
+﻿@model TheFitnessApp.Models.WorkoutSchedule
+@* Visar detaljer för ett träningsschema *@
+
+@{
+    ViewData["Title"] = "Schedule Details";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <h1 class="mb-4">Workout Schedule Details</h1>
+
+            <dl class="row">
+
+                <dt class="col-sm-4">Start Date</dt>
+                <dd class="col-sm-8">
+                    @Model.StartDate.ToShortDateString()
+                </dd>
+
+                <dt class="col-sm-4">End Date</dt>
+                <dd class="col-sm-8">
+                    @Model.EndDate.ToShortDateString()
+                </dd>
+
+                <dt class="col-sm-4">Notes</dt>
+                <dd class="col-sm-8">
+                    @Model.Notes
+                </dd>
+
+            </dl>
+
+            <div class="mt-4 d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-secondary">
+                    Back to list
+                </a>
+
+                <a asp-action="Edit"
+                   asp-route-id="@Model.ScheduleID"
+                   class="btn btn-primary">
+                    Edit
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+﻿@model TheFitnessApp.Models.WorkoutSession
+@* Kopplar vyn till modellen WorkoutSession *@
+
+@{
+    ViewData["Title"] = "Create Workout Session";
+}
+
+<!--
+    Bootstrap container:
+    - Begränsar bredden på innehållet
+    - Gör sidan mer lättläst
+-->
+<div class="container mt-5">
+
+    <!--
+        Bootstrap row:
+        - Används för layout i rader
+        - justify-content-center centrerar innehållet horisontellt
+    -->
+    <div class="row justify-content-center">
+
+        <!--
+            col-md-6:
+            - Gör formuläret smalare (6 av 12 kolumner)
+            - Anpassar sig automatiskt på mindre skärmar
+        -->
+        <div class="col-md-6">
+
+            <!-- Sidrubrik -->
+            <h1 class="mb-4">Create Workout Session</h1>
+
+            <!--
+                Formulär:
+                - asp-action="Create" betyder att formuläret skickas till
+                  POST-metoden Create i WorkoutController
+            -->
+            <form asp-action="Create" method="post">
+
+                <!-- Input för ScheduleID -->
+                <div class="form-group mb-3">
+                    <label asp-for="ScheduleID"></label>
+                    <input asp-for="ScheduleID" class="form-control" />
+                </div>
+
+                <!-- Input för starttid -->
+                <div class="form-group mb-3">
+                    <label asp-for="StartTime"></label>
+                    <input asp-for="StartTime"
+                           type="datetime-local"
+                           class="form-control" />
+                </div>
+
+                <!-- Input för sluttid -->
+                <div class="form-group mb-3">
+                    <label asp-for="EndTime"></label>
+                    <input asp-for="EndTime"
+                           type="datetime-local"
+                           class="form-control" />
+                </div>
+
+                <!-- Input för kalorier -->
+                <div class="form-group mb-4">
+                    <label asp-for="TotalCalories"></label>
+                    <input asp-for="TotalCalories"
+                           class="form-control" />
+                </div>
+
+                <!-- Spara-knapp -->
+                <button type="submit" class="btn btn-primary w-100">
+                    Save
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+</div>

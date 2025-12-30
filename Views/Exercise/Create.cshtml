@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Create Exercise";
+}
+@model TheFitnessApp.Models.Exercise
+@* Kopplar vyn till Exercise-modellen *@
+
+@{
+    ViewData["Title"] = "Create Exercise";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <h1 class="mb-4">Create Exercise</h1>
+
+            <form asp-action="Create" method="post">
+
+                <div class="form-group mb-3">
+                    <label asp-for="SessionID"></label>
+                    <input asp-for="SessionID" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Type"></label>
+                    <input asp-for="Type" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Category"></label>
+                    <input asp-for="Category" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Sets"></label>
+                    <input asp-for="Sets" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Reps"></label>
+                    <input asp-for="Reps" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="WeightKG"></label>
+                    <input asp-for="WeightKG" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="CaloriesBurnt"></label>
+                    <input asp-for="CaloriesBurnt" class="form-control" />
+                </div>
+
+                <div class="form-group mb-4">
+                    <label asp-for="METValue"></label>
+                    <input asp-for="METValue" class="form-control" />
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">
+                    Save
+                </button>
+
+                <a asp-action="Index" class="btn btn-secondary w-100 mt-2">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+</div>

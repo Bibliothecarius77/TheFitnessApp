@@ -23,20 +23,34 @@ namespace TheFitnessApp.Models
         public int ProfileID { get; set; }
         [ForeignKey(nameof(User))]                         // EF Core - DB Foreign Key
         public int UserID { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string AddrStreet { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public string? AddrStreet { get; set; }
         public int AddrNumber { get; set; }
-        public string AddrZip { get; set; }
-        public string AddrCity { get; set; }
-        public string AddrCountry { get; set; }
+        public string? AddrZip { get; set; }
+        public required string AddrCity { get; set; }
+        public required string AddrCountry { get; set; }
         //public string AddrPhone { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public required DateTime DateOfBirth { get; set; }
         public int HeightCM { get; set; }
         public float WeightKG { get; set; }
 
         public UserProfile()
         {
+            // Add content here
+        }
+
+        // Do we need this constructor?
+        public UserProfile(string firstName, string lastName, string city, string country, DateTime dateOfBirth)
+        {
+            // Add content here
+        }
+
+        // Do we need this constructor?
+        public UserProfile(string firstName, string lastName, string street, int number, string zip,
+            string city, string country, DateTime dateOfBirth, int heightCM, float weightKG)
+        {
+
             // Add content here
         }
 

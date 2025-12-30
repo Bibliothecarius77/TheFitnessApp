@@ -1,0 +1,96 @@
+/* Bakgrund med glass effect */
+.welcome-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+/* Dashboard-kortet */
+.dashboard {
+    width: 100%;
+    max-width: 500px;
+    margin: 50px auto 20px;
+    padding: 25px;
+
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    text-align: center;
+    color: #1b6ec2;
+}
+
+/* Snabbsummering – NY DESIGN UTAN RUTOR */
+.summary {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+/* Varje item (utan ruta) */
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #1b6ec2;
+}
+
+/* Ikon */
+.summary-item .icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+}
+
+/* Siffra */
+.summary-item .value {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+/* Label */
+.summary-item .label {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* Navigeringsknappar */
+.actions {
+    margin-top: 30px;
+}
+
+.actions .btn {
+    margin: 8px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    background: #1b6ec2;
+    text-decoration: none;
+    font-weight: bold;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.actions .btn:hover {
+    background: #144b8a;
+    color: #fff;
+}
+
+/* Mobilanpassning */
+@media (max-width: 768px) {
+    .summary {
+        gap: 25px;
+    }
+}

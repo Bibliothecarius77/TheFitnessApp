@@ -13,7 +13,6 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Reflection.Metadata;
 
 namespace TheFitnessApp.Models
 {
@@ -21,17 +20,19 @@ namespace TheFitnessApp.Models
     public class WorkoutSchedule
     {
         [Key]                                              // EF Core - DB Primary Key
-        public int ScheduleID { get; set; }
+        public int ScheduleID { get; set; } 
         [ForeignKey(nameof(User))]                         // EF Core - DB Foreign Key
         public int UserID { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
 
         private List<WorkoutSession> listSessions;
 
         public WorkoutSchedule()
         {
+            listSessions = new List<WorkoutSession>();
+
             // Add content here
         }
 
