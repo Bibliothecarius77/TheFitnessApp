@@ -1,71 +1,76 @@
 ﻿@model TheFitnessApp.Models.Exercise
-@* Kopplar vyn till Exercise-modellen *@
 
 @{
+    Layout = "_FullscreenModalLayout";
     ViewData["Title"] = "Edit Exercise";
 }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
+<div class="text-center text-white rounded-3 mb-4 p-3"
+  style="background: linear-gradient(135deg,#7b61ff,#157432);">
+  <h2>Edit Exercise</h2>
+</div>
 
-            <h1 class="mb-4">Edit Exercise</h1>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="ExerciseID" />
+    <input type="hidden" asp-for="SessionID" />
 
-            <form asp-action="Edit" method="post">
+    <div class="form-group mb-3">
+        <label asp-for="Type"></label>
+        <select asp-for="Type"
+            asp-items="Html.GetEnumSelectList<ExerciseType>()"
+            class="form-select">
+        </select>
+    </div>
 
-                <!-- Skickar med ID på övningen -->
-                <input type="hidden" asp-for="ExerciseID" />
+    <div class="form-group mb-3">
+        <label asp-for="Category"></label>
+        <input asp-for="Category" type="text" 
+            class="form-control" />
+    </div>
 
-                <div class="form-group mb-3">
-                    <label asp-for="SessionID"></label>
-                    <input asp-for="SessionID" class="form-control" />
-                </div>
+    <div class="d-flex justify-content-between mb-3 gap-1">
+        <div class="form-group col-sm-4">
+            <label asp-for="Sets"></label>
+            <input asp-for="Sets" type="number"
+                class="form-control" />
+        </div>
 
-                <div class="form-group mb-3">
-                    <label asp-for="Type"></label>
-                    <input asp-for="Type" class="form-control" />
-                </div>
-
-                <div class="form-group mb-3">
-                    <label asp-for="Category"></label>
-                    <input asp-for="Category" class="form-control" />
-                </div>
-
-                <div class="form-group mb-3">
-                    <label asp-for="Sets"></label>
-                    <input asp-for="Sets" class="form-control" />
-                </div>
-
-                <div class="form-group mb-3">
-                    <label asp-for="Reps"></label>
-                    <input asp-for="Reps" class="form-control" />
-                </div>
-
-                <div class="form-group mb-3">
-                    <label asp-for="WeightKG"></label>
-                    <input asp-for="WeightKG" class="form-control" />
-                </div>
-
-                <div class="form-group mb-3">
-                    <label asp-for="CaloriesBurnt"></label>
-                    <input asp-for="CaloriesBurnt" class="form-control" />
-                </div>
-
-                <div class="form-group mb-4">
-                    <label asp-for="METValue"></label>
-                    <input asp-for="METValue" class="form-control" />
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100">
-                    Save changes
-                </button>
-
-                <a asp-action="Index" class="btn btn-secondary w-100 mt-2">
-                    Cancel
-                </a>
-
-            </form>
-
+        <div class="form-group col-sm-4">
+            <label asp-for="Reps"></label>
+            <input asp-for="Reps" type="number"
+                class="form-control" />
+        </div>
+ 
+       <div class="form-group col-sm-4">
+            <label asp-for="METValue"></label>
+            <input asp-for="METValue" class="form-control" />
         </div>
     </div>
-</div>
+
+    <div class="d-flex justify-content-between mb-3 gap-1">
+        <div class="form-group col-sm-6">
+            <label asp-for="CaloriesBurnt"></label>
+            <input asp-for="CaloriesBurnt" type="number" 
+                class="form-control" />
+        </div>
+
+        <div class="form-group col-sm-6">
+            <label asp-for="WeightKG"></label>
+            <input asp-for="WeightKG" type="number" 
+                class="form-control" />
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+        <button class="btn btn-primary px-4 rounded-pill" type="submit">
+            Save Changes
+        </button>
+        
+        <a asp-action="Index" asp-controller="Exercise" 
+        class="btn btn-secondary px-4 rounded-pill">
+            Cancel
+        </a>
+    </div>
+
+</form>
+

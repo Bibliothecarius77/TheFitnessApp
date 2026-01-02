@@ -80,15 +80,12 @@ else
 
                                     @if (!isExpired)
                                     {
-                                        <br />
-
                                         <a asp-action="Edit"
                                           asp-route-id="@session.SessionID"
                                           class="btn btn-sm btn-warning">
                                           Edit
                                         </a>
 
-                                        <br />
                                         <a asp-action="Delete"
                                           asp-route-id="@session.SessionID"
                                           class="btn btn-sm btn-danger">

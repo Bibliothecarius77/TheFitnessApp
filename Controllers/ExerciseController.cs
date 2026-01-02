@@ -17,7 +17,35 @@ namespace TheFitnessApp.Controllers
         public IActionResult Index()
         {
             // TODO: Hämta data via Repository när det är implementerat
-            return View();
+            var exercises = new List<Exercise>
+            {
+                new Exercise
+                {
+                    ExerciseID = 1,
+                    SessionID = 1,
+                    Type = ExerciseType.Cardio,
+                    Category = "Test exercise",
+                    Sets = 3,
+                    Reps = 10,
+                    WeightKG = 50,
+                    CaloriesBurnt = 200,
+                    METValue = 5.5f
+                },
+                new Exercise
+                {
+                    ExerciseID = 2,
+                    SessionID = 1,
+                    Type = ExerciseType.Strength,
+                    Category = "Test exercise",
+                    Sets = 4,
+                    Reps = 8,
+                    WeightKG = 70,
+                    CaloriesBurnt = 250,
+                    METValue = 6.0f
+                }
+            };
+
+            return View(exercises);
         }
 
         // GET: /Exercise/Details/{id}
@@ -57,7 +85,18 @@ namespace TheFitnessApp.Controllers
         public IActionResult Edit(int id)
         {
             // TODO: Hämta via Repository
-            return View();
+            //return View();
+            var exercise = new Exercise
+            {
+                ExerciseID = id,
+                Category = "Strength",
+                Sets = 3,
+                Reps = 10,
+                WeightKG = 50,
+                METValue = 6.0f,
+                CaloriesBurnt = 200
+            };
+            return View(exercise);
         }
 
         // POST: /Exercise/Edit/{id}
@@ -77,7 +116,8 @@ namespace TheFitnessApp.Controllers
                 Category = "Strength",
                 Sets = 3,
                 Reps = 10,
-                WeightKG = 50
+                WeightKG = 50,
+                CaloriesBurnt = 200
             };
 
             return View(exercise);
