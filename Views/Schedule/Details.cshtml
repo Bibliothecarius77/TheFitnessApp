@@ -1,47 +1,77 @@
 ﻿@model TheFitnessApp.Models.WorkoutSchedule
-@* Visar detaljer för ett träningsschema *@
 
 @{
+    Layout = "_FullscreenModalLayout";
     ViewData["Title"] = "Schedule Details";
-}
+    bool isExpired = Model.EndDate < DateTime.Now;
+} 
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-
-            <h1 class="mb-4">Workout Schedule Details</h1>
-
-            <dl class="row">
-
-                <dt class="col-sm-4">Start Date</dt>
-                <dd class="col-sm-8">
-                    @Model.StartDate.ToShortDateString()
-                </dd>
-
-                <dt class="col-sm-4">End Date</dt>
-                <dd class="col-sm-8">
-                    @Model.EndDate.ToShortDateString()
-                </dd>
-
-                <dt class="col-sm-4">Notes</dt>
-                <dd class="col-sm-8">
-                    @Model.Notes
-                </dd>
-
-            </dl>
-
-            <div class="mt-4 d-flex justify-content-between">
-                <a asp-action="Index" class="btn btn-secondary">
-                    Back to list
-                </a>
-
-                <a asp-action="Edit"
-                   asp-route-id="@Model.ScheduleID"
-                   class="btn btn-primary">
-                    Edit
-                </a>
+<div class="container my-3">
+    <!-- Title -->
+    <div class="row mb-2">
+        <div class="col">
+            <div class="d-flex">
+                <div class="me-5">
+                    <h4 class="fw-medium">MY Schedule</h4>
+                    <h1 class="fw-bold text-muted">Details</h1>
+                </div>
+                <img src="/images/Zenmove-logo.jpg" 
+                    class="rounded-4 mb-3 ms-4"
+                    style="max-width: 110px;" />
             </div>
 
+            @if (isExpired)
+            {
+                <span class="badge bg-success-subtle text-success fw-medium mb-3">
+                    Completed
+                </span>
+            }
+
+            <p class="text-muted">
+                <strong>Start:</strong> @Model.StartDate.ToShortDateString() 
+                <span class="mx-1">|</span>
+                <strong>End:</strong> @Model.EndDate.ToShortDateString()
+                @* <span class="mt-2 px-2 py-2 badge bg-secondary">
+                    <strong>Schedule ID:</strong> <span class="ms-1">@Model.ScheduleID</span>
+                </span>*@
+            </p> 
+        </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="row">
+        <div class="col">
+            <div class="card shadow rounded-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">Notes</h5>
+                    </div>
+                    <p class="card-text fst-italic">@Model.Notes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="row mt-5">
+        <div class="mt-5 col text-center d-flex justify-content-center gap-3">
+
+            <a asp-action="Upcoming" asp-controller="Schedule"
+                asp-route-id="@Model.ScheduleID"
+                class="btn btn-primary px-3 rounded-pill">
+                Upcoming Workouts
+            </a>
+
+            <a asp-action="History" asp-controller="Schedule"
+                asp-route-id="@Model.ScheduleID"
+                class="btn btn-success px-3 rounded-pill">
+                Workout History
+            </a>
+
+            <a asp-action="Index" 
+                class="btn btn-outline-secondary px-4 rounded-pill">
+                Back to list
+            </a>
         </div>
     </div>
 </div>

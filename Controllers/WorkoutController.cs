@@ -18,10 +18,39 @@ namespace TheFitnessApp.Controllers
 
         // GET: /Workout
         // Visar alla träningspas
-       public IActionResult Index()
+        public IActionResult Index()
         {
+            var schedule = new WorkoutSchedule();
+            schedule.listSessions.AddRange(new[]
+            {
+                new WorkoutSession
+                {
+                    SessionID = 1,
+                    ScheduleID = 1,
+                    StartTime = DateTime.Now.AddDays(1),
+                    EndTime = DateTime.Now.AddDays(1).AddHours(1),
+                    TotalCalories = 450
+                },
+                new WorkoutSession
+                {
+                    SessionID = 2,
+                    ScheduleID = 1,
+                    StartTime = DateTime.Now.AddDays(-2),
+                    EndTime = DateTime.Now.AddDays(-2).AddHours(1),
+                    TotalCalories = 300
+                },
+                new WorkoutSession
+                {
+                    SessionID = 3,
+                    ScheduleID = 2,
+                    StartTime = DateTime.Now.AddDays(3),
+                    EndTime = DateTime.Now.AddDays(3).AddHours(1),
+                    TotalCalories = 500
+                }
+            });
+
             // TODO: Hämta träningspass via Repository när det är implementerat
-            return View();
+            return View(schedule.listSessions);
         }
 
         // READ – visa detaljer för ett träningspass
@@ -29,20 +58,39 @@ namespace TheFitnessApp.Controllers
         public IActionResult Details(int id)
         {
             // Här ska ett specifikt träningspass hämtas via Repository baserat på id 
-            
-            return View();
+            var session = new WorkoutSession
+            {
+                SessionID = id,
+                ScheduleID = 1,
+                StartTime = DateTime.Now.AddDays(-1),
+                EndTime = DateTime.Now.AddDays(-1).AddHours(1),
+                TotalCalories = 400
+            };
+            return View(session);
         }
 
         // GET: /Workout/Create
-        public IActionResult Create()
+        [HttpGet]
+        public IActionResult Create(int id)
         {
-            // Visar formulär för att skapa ett nytt träningspass
-            return View();
-        }
+            // TEMP sample data (replace with DB later)
+            var session = new WorkoutSession
+            {
+                ScheduleID = id,
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now.AddHours(1),
+                TotalCalories = 200
+            };
 
+            // Pass date limits to View
+            //ViewBag.ScheduleStart = schedule.StartDate;
+            //ViewBag.ScheduleEnd = schedule.EndDate;
+
+            return View(session);
+        }
         // CREATE – spara nytt träningspass
         // POST: /Workout/Create
-         [HttpPost]
+        [HttpPost]
         public IActionResult Create(WorkoutSession workoutSession)
         {
             // TODO: Skapa nytt träningspass via Repository
@@ -53,13 +101,27 @@ namespace TheFitnessApp.Controllers
 
         // UPDATE – visa formulär för redigering
         // GET: /Workout/Edit/{id}
+        [HttpGet]
         public IActionResult Edit(int id)
         {
-            // Här ska valt träningspass hämtas via Repository
-            return View();
+            // TEMP sample data (replace with DB later)
+            var session = new WorkoutSession
+            {
+                SessionID = id,
+                ScheduleID = 1,
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now.AddHours(1),
+                TotalCalories = 400
+            };
+            
+            // Pass date limits to View
+            //ViewBag.ScheduleStart = schedule.StartDate;
+            //ViewBag.ScheduleEnd = schedule.EndDate;
+
+            return View(session);
         }
 
-       
+
         // UPDATE – spara ändringar
         // POST: /Workout/Edit/{id}
         [HttpPost]
@@ -73,10 +135,18 @@ namespace TheFitnessApp.Controllers
         
         // DELETE – visa bekräftelse
         // GET: /Workout/Delete/{id}
+        [HttpGet]
         public IActionResult Delete(int id)
         {
-            // TODO: Hämta träningspass för bekräftelse via Repository
-            return View();
+            var session = new WorkoutSession
+            {
+                SessionID = id,
+                ScheduleID = 2,
+                StartTime = DateTime.Now.AddDays(-1),
+                EndTime = DateTime.Now.AddDays(-1).AddHours(1),
+                TotalCalories = 300
+            };
+            return View(session);
         }
 
         

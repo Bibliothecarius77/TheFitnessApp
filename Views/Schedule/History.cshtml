@@ -30,7 +30,7 @@
     <tbody>
     @foreach (var session in Model.GetHistory())
     {
-      <tr class="text-nowrap" style="font-size: 0.8rem;">
+      <tr class="text-nowrap text-center" style="font-size: 0.8rem;">
         <td class="text-muted">@session.StartTime.ToShortDateString()</td>
         <td class="text-muted">@session.StartTime.ToShortTimeString()</td>
         <td class="text-muted">@session.EndTime.ToShortTimeString()</td>
@@ -48,7 +48,7 @@
     </div>
   }
 
-  <a asp-action="WorkoutSchedule" asp-controller="Home"
+  <a asp-action="Details" asp-controller="Schedule"
     class="btn btn-secondary mt-5 rounded-pill">
     ← Back to Schedule
   </a>

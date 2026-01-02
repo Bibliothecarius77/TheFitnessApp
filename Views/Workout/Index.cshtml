@@ -1,19 +1,124 @@
-﻿@{
-    ViewData["Title"] = "Workouts";
+﻿@model IEnumerable<TheFitnessApp.Models.WorkoutSession>
+
+@{
+    ViewData["Title"] = "Workout Sessions";
+    bool hasExpired = Model != null && 
+    Model.All(s => s.EndTime < DateTime.Today);
 }
 
-<div class="container mt-5">
+@if (Model == null || hasExpired)
+{
+    <div class="top-0 start-0 w-100 h-100
+        d-flex align-items-center justify-content-center">
 
-    <h1 class="mb-4">Workout Sessions</h1>
+        <div class="card shadow-lg rounded-4 p-4 fw-medium text-center" 
+            style="width:400px;">
+            <h4 class="alert alert-warning rounded-4 mb-3">
+                No Active Workout Sessions
+            </h4>
 
-    <!-- Temporär text tills data kopplas från backend -->
-    <p>Här kommer en lista med träningspass visas.</p>
+            @if (Model == null)
+            {
+                <p>You don't have a workout session yet.</p>
+            }
+            else
+            {
+                <p>Your previous workout session has expired.</p>
+            }
 
-    <!-- Länk till Create -->
-    <a asp-controller="Workout"
-       asp-action="Create"
-       class="btn btn-primary mt-3">
-        Create new workout
-    </a>
+            <a asp-action="Create" asp-controller="Workout"
+               class="btn btn-primary px-4 rounded-pill mt-3">
+                + Create Workout Session
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="top-0 start-0 w-100 h-100
+        d-flex align-items-center justify-content-center">
 
-</div>
+        <div class="card shadow rounded-4 p-4 fw-medium" 
+            style="width:550px;">
+            <div class="col">
+                <!-- Title & Logo -->
+                <div class="d-flex">
+                    <div class="me-5 header-glass">
+                        <h4 class="fw-medium">MY Workout</h4>
+                        <h1 class="fw-bold text-muted">Session List</h1>
+                    </div>
+                    <img src="/images/Zenmove-logo.jpg" 
+                        class="rounded-4 mb-3"
+                        style="max-width: 120px; margin-left: 5rem;" />
+                </div>
+                <ul class="col list-group mb-4 mt-3">
+                    @foreach (var session in Model)
+                    {
+                        bool isExpired = session.EndTime < DateTime.Today;
+                        <li class="list-group-item @(isExpired ? "bg-light text-muted opacity-75" : "")">
+                            <div class="d-flex justify-content-between align-items-start">
+
+                                <!-- LEFT: Text -->
+                                <div>
+                                    <strong>Session ID:</strong> 
+                                    <span class="ms-2">@session.SessionID</span>
+                                    <span class="ms-4 fst-italic text-danger fw-bold">
+                                        @(isExpired ? "Expired" : "")</span>
+                                    <br />
+                                    <strong>Date: </strong>
+                                    <span class="ms-1">@session.StartTime.ToShortDateString()
+                                    <br />
+
+                                    <strong>Time:</strong>
+                                    <span class="ms-1">@session.StartTime.ToString("HH:mm") 
+                                        - @session.EndTime.ToString("HH:mm")</span>
+                                    <br />
+                                </div>
+
+                                <!-- RIGHT: Buttons -->
+                                <div class="d-flex gap-1 mt-1">
+
+                                    @if (!isExpired)
+                                    {
+                                        <br />
+
+                                        <a asp-action="Edit"
+                                          asp-route-id="@session.SessionID"
+                                          class="btn btn-sm btn-warning">
+                                          Edit
+                                        </a>
+
+                                        <br />
+                                        <a asp-action="Delete"
+                                          asp-route-id="@session.SessionID"
+                                          class="btn btn-sm btn-danger">
+                                          Delete
+                                        </a>
+                                    }
+
+                                    <a asp-action="Details"
+                                      asp-route-id="@session.SessionID"
+                                      class="btn btn-sm @(isExpired ? "btn-secondary" : "btn-primary")">
+                                      Details
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+                <a asp-action="Index" asp-controller="Profile"
+                  class="btn btn-secondary px-4 rounded-pill">
+                  Back to Profile
+                </a>
+
+                <a asp-action="Create" asp-controller="Workout"
+                  class="btn btn-success px-4 rounded-pill">
+                  + Create Session
+                </a>
+            </div>    
+        </div>
+    </div>
+}

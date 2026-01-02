@@ -1,58 +1,58 @@
 ﻿@model TheFitnessApp.Models.WorkoutSchedule
-@* Redigerar ett befintligt träningsschema *@
 
 @{
-    ViewData["Title"] = "Edit Schedule";
+  Layout = "_FullscreenModalLayout";
+  ViewData["Title"] = "Edit Schedule";
 }
-
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-
-            <h1 class="mb-4">Edit Workout Schedule</h1>
-
-            <form asp-action="Edit" method="post">
-
-                @* Skickar med ID dolt *@
-                <input type="hidden" asp-for="ScheduleID" />
-
-                <!-- Start Date -->
-                <div class="mb-3">
-                    <label asp-for="StartDate" class="form-label"></label>
-                    <input asp-for="StartDate"
-                           type="date"
-                           class="form-control" />
-                </div>
-
-                <!-- End Date -->
-                <div class="mb-3">
-                    <label asp-for="EndDate" class="form-label"></label>
-                    <input asp-for="EndDate"
-                           type="date"
-                           class="form-control" />
-                </div>
-
-                <!-- Notes -->
-                <div class="mb-3">
-                    <label asp-for="Notes" class="form-label"></label>
-                    <textarea asp-for="Notes"
-                              class="form-control"
-                              rows="3"></textarea>
-                </div>
-
-                <!-- Buttons -->
-                <div class="d-flex justify-content-between">
-                    <a asp-action="Index" class="btn btn-secondary">
-                        Cancel
-                    </a>
-
-                    <button type="submit" class="btn btn-primary">
-                        Save Changes
-                    </button>
-                </div>
-
-            </form>
-
-        </div>
-    </div>
+@{
+  //Note: Add this to the controller later
+  //ViewBag.ScheduleStart = schedule.StartDate;
+  //ViewBag.ScheduleEnd = schedule.EndDate;
+  ViewBag.ScheduleStart = DateTime.Now.Date;
+  ViewBag.ScheduleEnd = DateTime.Now.Date.AddMonths(1);
+    
+  var minDate = ((DateTime)ViewBag.ScheduleStart)
+    .ToString("yyyy-MM-ddTHH:mm");
+  var maxDate = ((DateTime)ViewBag.ScheduleEnd)
+    .ToString("yyyy-MM-ddTHH:mm");
+}
+            
+<div class="text-center text-white rounded-3 mb-4 p-3"
+  style="background: linear-gradient(135deg,#7b61ff,#157432);">
+  <h2>Edit Schedule</h2>
 </div>
+
+<form asp-action="Edit" method="post">
+  <input type="hidden" asp-for="ScheduleID" />
+
+  <div class="mb-3">
+    <label asp-for="StartDate" class="form-label"></label>
+    <input asp-for="StartDate" type="date" 
+      class="form-control" min="@minDate" max="@maxDate" />
+  </div>
+
+  <div class="mb-3">
+    <label asp-for="EndDate" class="form-label"></label>
+    <input asp-for="EndDate" type="date" 
+      class="form-control" min="@minDate" max="@maxDate" /> 
+  </div>
+
+  <div class="mb-3">
+    <label asp-for="Notes" class="form-label"></label>
+    <input asp-for="Notes" type="text" 
+      class="form-control" />
+  </div>
+
+  <div class="d-flex justify-content-between mt-4">
+    <button class="btn btn-primary px-4 rounded-pill" type="submit">
+      Save Changes
+    </button>
+
+    <a asp-controller="Schedule" asp-action="Index"
+      asp-route-id="@Model.ScheduleID"
+      class="btn btn-secondary px-4 rounded-pill">
+      Cancel
+    </a>
+  </div>
+
+</form>
