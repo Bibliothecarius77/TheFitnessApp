@@ -27,7 +27,8 @@ namespace TheFitnessApp.Models
         public DateTime EndDate { get; set; }
         public string? Notes { get; set; }
 
-        private List<WorkoutSession> listSessions;
+        //private List<WorkoutSession> listSessions;
+        public List<WorkoutSession> listSessions = new List<WorkoutSession>();
 
         public WorkoutSchedule()
         {

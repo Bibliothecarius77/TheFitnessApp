@@ -22,41 +22,107 @@ namespace TheFitnessApp.Controllers
         {
             // Tillfällig testdata (utan databas)
             var schedules = new List<WorkoutSchedule>
-    {
-        new WorkoutSchedule
-        {
-            ScheduleID = 1,
-            StartDate = DateTime.Today,
-            EndDate = DateTime.Today.AddDays(7),
-            Notes = "Test schedule – Week 1"
-        },
-        new WorkoutSchedule
-        {
-            ScheduleID = 2,
-            StartDate = DateTime.Today.AddDays(7),
-            EndDate = DateTime.Today.AddDays(14),
-            Notes = "Test schedule – Week 2"
-        }
-    };
+            {
+                new WorkoutSchedule
+            {
+                ScheduleID = 1,
+                StartDate = DateTime.Today.AddDays(-14),
+                EndDate = DateTime.Today.AddDays(-7),
+                Notes = "Test schedule – Week 1"
+            },
+            new WorkoutSchedule
+            {
+                ScheduleID = 2,
+                StartDate = DateTime.Today.AddDays(14),
+                EndDate = DateTime.Today.AddDays(7),
+                Notes = "Test schedule – Week 2"
+            }
+        };
 
             return View(schedules);
         }
 
 
+        // public WorkoutSchedule TestSchedule(int id)
+        // {   // Empty history and upcoming schedule
+        //     // TEMP sample data (replace with DB later)
+        //     var schedule = new WorkoutSchedule
+        //     {
+        //         ScheduleID = id,
+        //         UserID = 1,
+        //         StartDate = DateTime.Today.AddDays(-14),
+        //         EndDate = DateTime.Today.AddDays(7), // If its -7 create schedule view
+        //         Notes = "Weekly fitness plan"
+        //     };
+        //     return schedule;
+        // }
+        // Upcoming and history data view
+        private WorkoutSchedule TestSchedule(int id)
+        {
+            var schedule = new WorkoutSchedule
+            {
+                ScheduleID = id,
+                StartDate = DateTime.Today.AddDays(-14),
+                EndDate = DateTime.Today.AddDays(-7),
+                Notes = "Test schedule"
+            };
+
+            schedule.listSessions.AddRange(new[]
+            {
+                new WorkoutSession
+                {
+                    SessionID = 1,
+                    ScheduleID = id,
+                    StartTime = DateTime.Now.AddDays(-2),
+                    EndTime = DateTime.Now.AddDays(-2).AddHours(1),
+                    TotalCalories = 300
+                },
+                new WorkoutSession
+                {
+                    SessionID = 2,
+                    ScheduleID = id,
+                    StartTime = DateTime.Now.AddDays(-4),
+                    EndTime = DateTime.Now.AddDays(-4).AddHours(1),
+                    TotalCalories = 200
+                },
+                new WorkoutSession
+                {
+                    SessionID = 3,
+                    ScheduleID = id,
+                    StartTime = DateTime.Now.AddDays(1),
+                    EndTime = DateTime.Now.AddDays(1).AddHours(1),
+                    TotalCalories = 450
+                },
+                new WorkoutSession
+                {
+                    SessionID = 4,
+                    ScheduleID = id,
+                    StartTime = DateTime.Now.AddDays(3),
+                    EndTime = DateTime.Now.AddDays(3).AddHours(1),
+                    TotalCalories = 500
+                }
+            });
+            return schedule;
+        }
 
         // READ – visa detaljer för ett schema
         // GET: /Schedule/Details/{id} 
         //Tillfällig lösning för att visa detaljer för ett träningsschema baserat på ID
         public IActionResult Details(int id)
         {
-            var schedule = new WorkoutSchedule
-            {
-                ScheduleID = id,
-                StartDate = DateTime.Today,
-                EndDate = DateTime.Today.AddDays(7),
-                Notes = "Test schedule"
-            };
+            var schedule = TestSchedule(id);
+            return View(schedule);
+        }
 
+        public IActionResult Upcoming(int id)
+        {
+            var schedule = TestSchedule(id);
+            return View(schedule);
+        }
+
+        public IActionResult History(int id)
+        {
+            var schedule = TestSchedule(id);
             return View(schedule);
         }
 

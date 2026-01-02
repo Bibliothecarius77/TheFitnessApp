@@ -1,9 +1,10 @@
 @model TheFitnessApp.Models.WorkoutSchedule
+
 @{
-    Layout = "_FullscreenModalLayout";
-    ViewData["Title"] = "Upcoming Workouts";
-    var history = Model.GetHistory();
-    bool hasHistory = history != null && history.Any();
+  Layout = "_FullscreenModalLayout";
+  ViewData["Title"] = "Upcoming Workouts";
+  var history = Model.GetHistory();
+  bool hasHistory = history != null && history.Any();
 }
 
 <!-- Upcoming Sessions -->
@@ -29,17 +30,19 @@
       <tbody>
       @foreach (var session in Model.GetUpcoming())
       {
-        <tr class="text-nowrap" style="font-size: 0.8rem;">
+        <tr class="text-nowrap text-center" style="font-size: 0.8rem;">
           <td>@session.StartTime.ToShortDateString()</td>
           <td>@session.StartTime.ToShortTimeString()-@session.EndTime.ToShortTimeString()</td>
           <td>@((int)(session.EndTime - session.StartTime).TotalMinutes) mins</td>
           <td class="fw-bold text-danger">@session.TotalCalories kcal</td>
           <td>
-            <a asp-action="EditSession" asp-route-id="@session.SessionID" 
+            <a asp-action="Edit" asp-controller="Workout" 
+              asp-route-id="@session.SessionID" 
               class="btn btn-sm btn-outline-primary" style="font-size: 0.75rem;">
               Edit
             </a>
-            <a asp-action="DeleteSession" asp-route-id="@session.SessionID" 
+            <a asp-action="Delete" asp-controller="Workout" 
+              asp-route-id="@session.SessionID" 
               class="btn btn-sm btn-outline-danger" style="font-size: 0.75rem;">
               Delete
             </a>
@@ -56,7 +59,7 @@
     </div>
   }
 
-  <a asp-action="WorkoutSchedule" asp-controller="Home"
+  <a asp-action="Details" asp-controller="Schedule"
     class="btn btn-secondary mt-5 rounded-pill">
     ← Back to Schedule
   </a>
