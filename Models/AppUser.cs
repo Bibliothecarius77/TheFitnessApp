@@ -15,14 +15,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace TheFitnessApp.Models
 {
-    //[Table("Users")]                                       // DB table name
-    //[Table("AspNetUsers")]                                 // DB table name
     public class AppUser : IdentityUser<Guid>
     {
-        // ASP.NET uses string 'Id' as the primary key by default
-
-        //[Key]                                              // EF Core - DB Primary Key
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         //public override Guid Id { get; set; }
         public DateTime CreationDate { get; set; }
 
@@ -38,21 +32,5 @@ namespace TheFitnessApp.Models
         {
             CreationDate = DateTime.Now;
         }
-
-        // Returns true if succesful
-        //public bool Login()
-        //{
-        //    // Add content here
-        //    return false;
-        //}
-
-        //public void AssignRole(UserRole role)
-        //{
-        //    Role = role;
-        //}
-        //public async Task<IdentityResult> AssignRoleAsync(string role)
-        //{
-        //    await _userRoleService.AssignRoleAsync(this, role);
-        //}
     }
 }

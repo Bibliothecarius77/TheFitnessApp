@@ -14,6 +14,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 using TheFitnessApp.Models;
 
 namespace TheFitnessApp.Data
@@ -35,6 +36,11 @@ namespace TheFitnessApp.Data
         {
             base.OnModelCreating(modelBuilder);
             ConfigureDomain(modelBuilder);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            SeedData(optionsBuilder);
         }
 
         private static void ConfigureDomain(ModelBuilder builder)
@@ -93,6 +99,95 @@ namespace TheFitnessApp.Data
                 .HasOne(s => s.Session)
                 .WithMany(u => u.Exercises)
                 .HasForeignKey(s => s.SessionID);
+        }
+
+        private void SeedData(DbContextOptionsBuilder optionsBuilder)
+        {
+/*
+            optionsBuilder.UseSqlServer("<ConnectionString>")
+                          .UseSeeding((context, _) =>
+                          {
+                              if (!context.Set<Person>().Any(x => x.Name == "Felipe"))
+                              {
+                                  context.Set<Person>().Add(new Person { Name = "Felipe" });
+                                  context.SaveChanges();
+                              }
+                          });
+
+
+
+            Users.AddRange(
+            [
+                new Exercise
+                {
+                    Email = "arsalan_dx@hotmail.com",
+                    NormalizedEmail = "ARSALAN_DX@HOTMAIL.COM",
+                    UserName = "Arsalan",
+                    NormalizedUserName = "ARSALAN",
+                    EmailConfirmed = true
+                },
+                new AppUser
+                {
+                    Email = "jacob.damm@gmail.com",
+                    NormalizedEmail = "JACOB.DAMM@GMAIL.COM",
+                    UserName = "Jacob",
+                    NormalizedUserName = "JACOB",
+                    EmailConfirmed = true
+                },
+                new AppUser
+                {
+                    Email = "liridona.demaj@outlook.com",
+                    NormalizedEmail = "LIRIDONA.DEMAJ@OUTLOOK.COM",
+                    UserName = "Liridona",
+                    NormalizedUserName = "LIRIDONA",
+                    EmailConfirmed = true
+                },
+                new AppUser
+                {
+                    Email = "radbergvictoria@gmail.com",
+                    NormalizedEmail = "RADBERGVICTORIA@GMAIL.COM",
+                    UserName = "Victoria",
+                    NormalizedUserName = "VICTORIA",
+                    EmailConfirmed = true
+                }
+            ]);
+
+            Exercises.AddRange(
+            [
+                new Exercise
+                {
+                    Email = "arsalan_dx@hotmail.com",
+                    NormalizedEmail = "ARSALAN_DX@HOTMAIL.COM",
+                    UserName = "Arsalan",
+                    NormalizedUserName = "ARSALAN",
+                    EmailConfirmed = true
+                },
+                new AppUser
+                {
+                    Email = "jacob.damm@gmail.com",
+                    NormalizedEmail = "JACOB.DAMM@GMAIL.COM",
+                    UserName = "Jacob",
+                    NormalizedUserName = "JACOB",
+                    EmailConfirmed = true
+                },
+                new AppUser
+                {
+                    Email = "liridona.demaj@outlook.com",
+                    NormalizedEmail = "LIRIDONA.DEMAJ@OUTLOOK.COM",
+                    UserName = "Liridona",
+                    NormalizedUserName = "LIRIDONA",
+                    EmailConfirmed = true
+                },
+                new AppUser
+                {
+                    Email = "radbergvictoria@gmail.com",
+                    NormalizedEmail = "RADBERGVICTORIA@GMAIL.COM",
+                    UserName = "Victoria",
+                    NormalizedUserName = "VICTORIA",
+                    EmailConfirmed = true
+                }
+            ]);
+*/
         }
     }
 }

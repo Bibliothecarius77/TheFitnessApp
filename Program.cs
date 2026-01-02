@@ -11,6 +11,7 @@
  *   Victoria Rådberg
  */
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TheFitnessApp.Data;
 using TheFitnessApp.Models;
@@ -28,8 +29,6 @@ namespace TheFitnessApp
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
             // Add database connection.
-            //builder.Services.AddDbContext<IdentityContext>(options => options.UseSqlServer(connectionString));
-            //builder.Services.AddDbContext<GeneralContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddDbContext<UnifiedContext>(options => options.UseSqlServer(connectionString));
 
             // Middleware to help detect and diagnose errors with Entity Framework Core migrations. (Can be removed.)
@@ -51,7 +50,9 @@ namespace TheFitnessApp
             //builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = true)
             //    .AddEntityFrameworkStores<UnifiedContext>();
 
+            // Endast MVC-controllers och views (ingen Identity UI, ingen scaffoldad CSS)
             builder.Services.AddControllersWithViews();
+
             //builder.Services.AddScoped<IRepository, Repository>();
             builder.Services.AddScoped<IUserService, UserService>();
 
@@ -92,6 +93,9 @@ namespace TheFitnessApp
             }
 
             app.MapStaticAssets();
+
+            // ROUTING
+            // Steg 1 – Index är startsidan
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");

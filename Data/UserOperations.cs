@@ -12,8 +12,6 @@
  */
 
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using TheFitnessApp.Models;
 
 namespace TheFitnessApp.Data
@@ -27,8 +25,6 @@ namespace TheFitnessApp.Data
     {
         public static async Task CreateDefaultRolesAsync(RoleManager<IdentityRole<Guid>> roleManager)
         {
-            //string[] roles = ["Admin", "User"];
-            //string[] roles = Enum.GetNames(typeof(UserRole));
             string[] roles = Enum.GetNames<UserRole>();
 
             foreach (string role in roles)

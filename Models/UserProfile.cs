@@ -11,18 +11,12 @@
  *   Victoria Rådberg
  */
 
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace TheFitnessApp.Models
 {
-    //[Table("UserProfiles")]                                // DB table name
     public class UserProfile
     {
-        //[Key]                                              // EF Core - DB Primary Key
         public Guid ProfileID { get; set; }
         public required AppUser User { get; set; }
-        //[ForeignKey(nameof(AppUser))]                      // EF Core - DB Foreign Key
         public required Guid UserID { get; set; }          // EF Core - DB Foreign Key
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
@@ -38,17 +32,6 @@ namespace TheFitnessApp.Models
         public UserProfile()
         {
         }
-
-        // Do we need this constructor?
-        //public UserProfile(string firstName, string lastName, string city, string country, DateTime dateOfBirth)
-        //{
-        //}
-
-        // Do we need this constructor?
-        //public UserProfile(string firstName, string lastName, string street, int number, string zip,
-        //    string city, string country, DateTime dateOfBirth, int heightCM, float weightKG)
-        //{
-        //}
 
         public void UpdateProfile()
         {

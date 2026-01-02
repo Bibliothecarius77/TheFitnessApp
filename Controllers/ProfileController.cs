@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using TheFitnessApp.Data;
 using TheFitnessApp.Models;
 
@@ -7,10 +7,10 @@ namespace TheFitnessApp.Controllers
     // Controller för användarens profil
     public class ProfileController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly UnifiedContext _context;
 
         // Konstruktor med Dependency Injection
-        public ProfileController(ApplicationDbContext context)
+        public ProfileController(UnifiedContext context)
         {
             _context = context;
         }
@@ -42,10 +42,11 @@ namespace TheFitnessApp.Controllers
             {
                 new WorkoutGoal
                 {
-                    GoalID = 1,
+                    //GoalID = 1,
+                    GoalID = Guid.NewGuid(),
                     Type = GoalType.WeightLoss,
                     TargetValue = 10,
-                    Deadline = DateTime.Now.AddMonths(1),
+                    TargetDate = DateTime.Now.AddMonths(1),
                     IsCompleted = false
                 }
             };

@@ -11,18 +11,12 @@
  *   Victoria Rådberg
  */
 
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace TheFitnessApp.Models
 {
-    //[Table("Statistics")]                                  // DB table name
     public class Statistics
     {
-        //[Key]                                              // EF Core - DB Primary Key
         public Guid StatsID { get; set; }
         public required AppUser User { get; set; }
-        //[ForeignKey(nameof(AppUser))]                      // EF Core - DB Foreign Key
         public required Guid UserID { get; set; }          // EF Core - DB Foreign Key
         public DateTime PeriodStart { get; set; }
         public DateTime PeriodEnd { get; set; }

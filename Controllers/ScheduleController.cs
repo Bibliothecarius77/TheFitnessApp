@@ -1,7 +1,7 @@
-﻿// Gör det möjligt att använda MVC-funktioner som Controller och IActionResult
+// Gör det möjligt att använda MVC-funktioner som Controller och IActionResult
 using Microsoft.AspNetCore.Mvc;
 
-// Ger tillgång till ApplicationDbContext (databasen)
+// Ger tillgång till UnifiedContext (databasen)
 using TheFitnessApp.Data;
 using TheFitnessApp.Models;
 
@@ -9,9 +9,9 @@ namespace TheFitnessApp.Controllers
 {
     public class ScheduleController : Controller // Controller som ansvarar för träningsscheman (WorkoutSchedule)
     {
-        private readonly ApplicationDbContext _context;  // Databaskontext (ersätts senare av Repository)
+        private readonly UnifiedContext _context;  // Databaskontext (ersätts senare av Repository)
 
-        public ScheduleController(ApplicationDbContext context) // Konstruktor som använder Dependency Injection. // ApplicationDbContext skickas in automatiskt av ASP.NET Core
+        public ScheduleController(UnifiedContext context) // Konstruktor som använder Dependency Injection. // UnifiedContext skickas in automatiskt av ASP.NET Core
         {
             _context = context;  // Sparar kontexten så den kan användas i hela controllern, t.ex. för att läsa och skriva till databasen.
         }
@@ -24,20 +24,22 @@ namespace TheFitnessApp.Controllers
             var schedules = new List<WorkoutSchedule>
             {
                 new WorkoutSchedule
-            {
-                ScheduleID = 1,
-                StartDate = DateTime.Today.AddDays(-14),
-                EndDate = DateTime.Today.AddDays(-7),
-                Notes = "Test schedule – Week 1"
-            },
-            new WorkoutSchedule
-            {
-                ScheduleID = 2,
-                StartDate = DateTime.Today.AddDays(14),
-                EndDate = DateTime.Today.AddDays(7),
-                Notes = "Test schedule – Week 2"
-            }
-        };
+                {
+                    //ScheduleID = 1,
+                    ScheduleID = Guid.NewGuid(),
+                    StartDate = DateTime.Today.AddDays(-14),
+                    EndDate = DateTime.Today.AddDays(-7),
+                    Notes = "Test schedule – Week 1"
+                },
+                new WorkoutSchedule
+                {
+                    //ScheduleID = 2,
+                    ScheduleID = Guid.NewGuid(),
+                    StartDate = DateTime.Today.AddDays(14),
+                    EndDate = DateTime.Today.AddDays(7),
+                    Notes = "Test schedule – Week 2"
+                }
+            };
 
             return View(schedules);
         }
@@ -57,7 +59,8 @@ namespace TheFitnessApp.Controllers
         //     return schedule;
         // }
         // Upcoming and history data view
-        private WorkoutSchedule TestSchedule(int id)
+        //private static WorkoutSchedule TestSchedule(int id)
+        private static WorkoutSchedule TestSchedule(Guid id)
         {
             var schedule = new WorkoutSchedule
             {
@@ -67,11 +70,12 @@ namespace TheFitnessApp.Controllers
                 Notes = "Test schedule"
             };
 
-            schedule.listSessions.AddRange(new[]
+            schedule.Sessions.AddRange(new[]
             {
                 new WorkoutSession
                 {
-                    SessionID = 1,
+                    //SessionID = 1,
+                    SessionID = Guid.NewGuid(),
                     ScheduleID = id,
                     StartTime = DateTime.Now.AddDays(-2),
                     EndTime = DateTime.Now.AddDays(-2).AddHours(1),
@@ -79,24 +83,24 @@ namespace TheFitnessApp.Controllers
                 },
                 new WorkoutSession
                 {
-                    SessionID = 2,
-                    ScheduleID = id,
+                    //SessionID = 2,
+                    SessionID = Guid.NewGuid(),
                     StartTime = DateTime.Now.AddDays(-4),
                     EndTime = DateTime.Now.AddDays(-4).AddHours(1),
                     TotalCalories = 200
                 },
                 new WorkoutSession
                 {
-                    SessionID = 3,
-                    ScheduleID = id,
+                    //SessionID = 3,
+                    SessionID = Guid.NewGuid(),
                     StartTime = DateTime.Now.AddDays(1),
                     EndTime = DateTime.Now.AddDays(1).AddHours(1),
                     TotalCalories = 450
                 },
                 new WorkoutSession
                 {
-                    SessionID = 4,
-                    ScheduleID = id,
+                    //SessionID = 4,
+                    SessionID = Guid.NewGuid(),
                     StartTime = DateTime.Now.AddDays(3),
                     EndTime = DateTime.Now.AddDays(3).AddHours(1),
                     TotalCalories = 500
@@ -106,21 +110,24 @@ namespace TheFitnessApp.Controllers
         }
 
         // READ – visa detaljer för ett schema
-        // GET: /Schedule/Details/{id} 
+        // GET: /Schedule/Details/{id}
         //Tillfällig lösning för att visa detaljer för ett träningsschema baserat på ID
-        public IActionResult Details(int id)
+        //public IActionResult Details(int id)
+        public IActionResult Details(Guid id)
         {
             var schedule = TestSchedule(id);
             return View(schedule);
         }
 
-        public IActionResult Upcoming(int id)
+        //public IActionResult Upcoming(int id)
+        public IActionResult Upcoming(Guid id)
         {
             var schedule = TestSchedule(id);
             return View(schedule);
         }
 
-        public IActionResult History(int id)
+        //public IActionResult History(int id)
+        public IActionResult History(Guid id)
         {
             var schedule = TestSchedule(id);
             return View(schedule);
@@ -151,7 +158,8 @@ namespace TheFitnessApp.Controllers
         // UPDATE – visa formulär för redigering
         // GET: /Schedule/Edit/{id}
         // tillfällig lösning för att visa redigeringsformulär för ett träningsschema baserat på ID
-        public IActionResult Edit(int id)
+        //public IActionResult Edit(int id)
+        public IActionResult Edit(Guid id)
         {
             var schedule = new WorkoutSchedule
             {
@@ -168,7 +176,8 @@ namespace TheFitnessApp.Controllers
         // UPDATE – spara ändringar
         // POST: /Schedule/Edit/{id}
         [HttpPost]
-        public IActionResult Edit(int id, WorkoutSchedule workoutSchedule)
+        //public IActionResult Edit(int id, WorkoutSchedule workoutSchedule)
+        public IActionResult Edit(Guid id, WorkoutSchedule workoutSchedule)
         {
             // TODO: Uppdatera träningsschema via Repository
 
@@ -180,7 +189,8 @@ namespace TheFitnessApp.Controllers
         // GET: /Schedule/Delete/{id}
         // tillfällig lösning för att visa bekräftelsesidan för att ta bort ett träningsschema baserat på ID
 
-        public IActionResult Delete(int id)
+        //public IActionResult Delete(int id)
+        public IActionResult Delete(Guid id)
         {
             var schedule = new WorkoutSchedule
             {
@@ -198,7 +208,8 @@ namespace TheFitnessApp.Controllers
         // POST: /Schedule/DeleteConfirmed/{id}
 
         [HttpPost]
-        public IActionResult DeleteConfirmed(int id)
+        //public IActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
             // TODO: Ta bort träningsschema via Repository
 

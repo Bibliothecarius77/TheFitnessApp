@@ -17,6 +17,11 @@ using TheFitnessApp.Models;
 
 namespace TheFitnessApp.Data
 {
+    public interface IUserService
+    {
+        Task<AppUser?> GetCurrentUserAsync(ClaimsPrincipal principal);
+    }
+
     public class UserService : IUserService
     {
         private readonly UserManager<AppUser> _userManager;

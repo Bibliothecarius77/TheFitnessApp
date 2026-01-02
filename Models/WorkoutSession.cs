@@ -11,17 +11,11 @@
  *   Victoria Rådberg
  */
 
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace TheFitnessApp.Models
 {
-    //[Table("Sessions")]                                    // DB table name
     public class WorkoutSession
     {
-        //[Key]                                              // EF Core - DB Primary Key
         public Guid SessionID { get; set; }
-        //[ForeignKey(nameof(WorkoutSchedule))]              // EF Core - DB Foreign Key
         public required WorkoutSchedule Schedule { get; set; }
         public Guid ScheduleID { get; set; }
         public DateTime StartTime { get; set; }
@@ -29,7 +23,8 @@ namespace TheFitnessApp.Models
         public int TotalCalories { get; set; }
 
         // Navigation properties for one-to-many relationsips
-        public ICollection<Exercise> Exercises { get; set; } = new List<Exercise>();
+        //public ICollection<Exercise> Exercises { get; set; } = new List<Exercise>();
+        public List<Exercise> Exercises { get; set; } = new List<Exercise>();
 
         public WorkoutSession()
         {

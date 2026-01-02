@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using TheFitnessApp.Data;
 using TheFitnessApp.Models;
 
@@ -8,10 +8,10 @@ namespace TheFitnessApp.Controllers
     public class WorkoutController : Controller
     {
         // Databaskontext
-        private readonly ApplicationDbContext _context;
+        private readonly UnifiedContext _context;
 
-        // Konstruktor med Dependency Injection. ASP.NET Core skickar in ApplicationDbContext automatiskt.
-        public WorkoutController(ApplicationDbContext context)
+        // Konstruktor med Dependency Injection. ASP.NET Core skickar in UnifiedContext automatiskt.
+        public WorkoutController(UnifiedContext context)
         {
             _context = context; // Gör databasen tillgänglig i controllern för att läsa och spara data
         }
@@ -21,28 +21,34 @@ namespace TheFitnessApp.Controllers
         public IActionResult Index()
         {
             var schedule = new WorkoutSchedule();
-            schedule.listSessions.AddRange(new[]
+            schedule.Sessions.AddRange(new[]
             {
                 new WorkoutSession
                 {
-                    SessionID = 1,
-                    ScheduleID = 1,
+                    //SessionID = 1,
+                    SessionID = Guid.NewGuid(),
+                    //ScheduleID = 1,
+                    ScheduleID = Guid.NewGuid(),
                     StartTime = DateTime.Now.AddDays(1),
                     EndTime = DateTime.Now.AddDays(1).AddHours(1),
                     TotalCalories = 450
                 },
                 new WorkoutSession
                 {
-                    SessionID = 2,
-                    ScheduleID = 1,
+                    //SessionID = 2,
+                    SessionID = Guid.NewGuid(),
+                    //ScheduleID = 1,
+                    ScheduleID = Guid.NewGuid(),
                     StartTime = DateTime.Now.AddDays(-2),
                     EndTime = DateTime.Now.AddDays(-2).AddHours(1),
                     TotalCalories = 300
                 },
                 new WorkoutSession
                 {
-                    SessionID = 3,
-                    ScheduleID = 2,
+                    //SessionID = 3,
+                    SessionID = Guid.NewGuid(),
+                    //ScheduleID = 2,
+                    ScheduleID = Guid.NewGuid(),
                     StartTime = DateTime.Now.AddDays(3),
                     EndTime = DateTime.Now.AddDays(3).AddHours(1),
                     TotalCalories = 500
@@ -50,18 +56,20 @@ namespace TheFitnessApp.Controllers
             });
 
             // TODO: Hämta träningspass via Repository när det är implementerat
-            return View(schedule.listSessions);
+            return View(schedule.Sessions);
         }
 
         // READ – visa detaljer för ett träningspass
         // GET: /Workout/Details/{id}
-        public IActionResult Details(int id)
+        //public IActionResult Details(int id)
+        public IActionResult Details(Guid id)
         {
             // Här ska ett specifikt träningspass hämtas via Repository baserat på id 
             var session = new WorkoutSession
             {
                 SessionID = id,
-                ScheduleID = 1,
+                //ScheduleID = 1,
+                ScheduleID = Guid.NewGuid(),
                 StartTime = DateTime.Now.AddDays(-1),
                 EndTime = DateTime.Now.AddDays(-1).AddHours(1),
                 TotalCalories = 400
@@ -71,7 +79,8 @@ namespace TheFitnessApp.Controllers
 
         // GET: /Workout/Create
         [HttpGet]
-        public IActionResult Create(int id)
+        //public IActionResult Create(int id)
+        public IActionResult Create(Guid id)
         {
             // TEMP sample data (replace with DB later)
             var session = new WorkoutSession
@@ -88,6 +97,7 @@ namespace TheFitnessApp.Controllers
 
             return View(session);
         }
+
         // CREATE – spara nytt träningspass
         // POST: /Workout/Create
         [HttpPost]
@@ -98,17 +108,18 @@ namespace TheFitnessApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         // UPDATE – visa formulär för redigering
         // GET: /Workout/Edit/{id}
         [HttpGet]
-        public IActionResult Edit(int id)
+        //public IActionResult Edit(int id)
+        public IActionResult Edit(Guid id)
         {
             // TEMP sample data (replace with DB later)
             var session = new WorkoutSession
             {
                 SessionID = id,
-                ScheduleID = 1,
+                //ScheduleID = 1,
+                ScheduleID = Guid.NewGuid(),
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now.AddHours(1),
                 TotalCalories = 400
@@ -125,7 +136,8 @@ namespace TheFitnessApp.Controllers
         // UPDATE – spara ändringar
         // POST: /Workout/Edit/{id}
         [HttpPost]
-        public IActionResult Edit(int id, WorkoutSession workoutSession)
+        //public IActionResult Edit(int id, WorkoutSession workoutSession)
+        public IActionResult Edit(Guid id, WorkoutSession workoutSession)
         {
             // TODO: Uppdatera träningspass via Repository
 
@@ -136,12 +148,14 @@ namespace TheFitnessApp.Controllers
         // DELETE – visa bekräftelse
         // GET: /Workout/Delete/{id}
         [HttpGet]
-        public IActionResult Delete(int id)
+        //public IActionResult Delete(int id)
+        public IActionResult Delete(Guid id)
         {
             var session = new WorkoutSession
             {
                 SessionID = id,
-                ScheduleID = 2,
+                //ScheduleID = 2,
+                ScheduleID = Guid.NewGuid(),
                 StartTime = DateTime.Now.AddDays(-1),
                 EndTime = DateTime.Now.AddDays(-1).AddHours(1),
                 TotalCalories = 300
@@ -153,7 +167,8 @@ namespace TheFitnessApp.Controllers
         // DELETE – ta bort träningspass
         // POST: /Workout/DeleteConfirmed/{id}
         [HttpPost]
-        public IActionResult DeleteConfirmed(int id)
+        //public IActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(Guid id)
         {
             // TODO: Ta bort träningspass via Repository
 

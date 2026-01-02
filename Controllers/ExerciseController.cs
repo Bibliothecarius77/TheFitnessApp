@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using TheFitnessApp.Data;
 using TheFitnessApp.Models;
 
@@ -6,9 +6,9 @@ namespace TheFitnessApp.Controllers
 {
     public class ExerciseController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly UnifiedContext _context;
 
-        public ExerciseController(ApplicationDbContext context)
+        public ExerciseController(UnifiedContext context)
         {
             _context = context;
         }
@@ -21,12 +21,14 @@ namespace TheFitnessApp.Controllers
         }
 
         // GET: /Exercise/Details/{id}
-        public IActionResult Details(int id)
+        //public IActionResult Details(int id)
+        public IActionResult Details(Guid id)
         {
             var exercise = new Exercise
             {
                 ExerciseID = id,
-                SessionID = 1,
+                //SessionID = 1,
+                SessionID = Guid.NewGuid(),
                 Type = ExerciseType.Cardio,
                 Category = "Test exercise",
                 Sets = 3,
@@ -69,11 +71,16 @@ namespace TheFitnessApp.Controllers
         }
 
         // GET: /Exercise/Delete/{id}
-        public IActionResult Delete(int id)
+        //public IActionResult Delete(int id)
+        public IActionResult Delete(Guid id)
         {
+            var sessionNew = new WorkoutSession();
+
             var exercise = new Exercise
             {
                 ExerciseID = id,
+                SessionID = sessionNew.SessionID,
+                Session = sessionNew,
                 Category = "Strength",
                 Sets = 3,
                 Reps = 10,
