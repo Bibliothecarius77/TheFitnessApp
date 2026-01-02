@@ -17,10 +17,10 @@ namespace TheFitnessApp.Data
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly GeneralContext _context;
+        private readonly UnifiedContext _context;
         private readonly DbSet<T> _dbSet;
 
-        public Repository(GeneralContext dbContext)
+        public Repository(UnifiedContext dbContext)
         {
             _context = dbContext;
             _dbSet = _context.Set<T>();

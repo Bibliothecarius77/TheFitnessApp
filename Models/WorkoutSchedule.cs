@@ -16,23 +16,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TheFitnessApp.Models
 {
-    [Table("Schedules")]                                   // DB table name
+    //[Table("Schedules")]                                   // DB table name
     public class WorkoutSchedule
     {
-        [Key]                                              // EF Core - DB Primary Key
-        public int ScheduleID { get; set; }
-        [ForeignKey(nameof(User))]                         // EF Core - DB Foreign Key
-        public int UserID { get; set; }
+        //[Key]                                              // EF Core - DB Primary Key
+        public Guid ScheduleID { get; set; }
+        public required AppUser User { get; set; }
+        //[ForeignKey(nameof(AppUser))]                      // EF Core - DB Foreign Key
+        public required Guid UserID { get; set; }          // EF Core - DB Foreign Key
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string? Notes { get; set; }
 
-        private List<WorkoutSession> listSessions;
+        // Navigation properties for one-to-many relationsips
+        public ICollection<WorkoutSession> Sessions { get; set; } = new List<WorkoutSession>();
 
         public WorkoutSchedule()
         {
-            listSessions = new List<WorkoutSession>();
-
             // Add content here
         }
 
@@ -48,19 +48,30 @@ namespace TheFitnessApp.Models
 
         public void AddSession(WorkoutSession session)
         {
-            listSessions.Add(session);
+            if (Sessions == null)
+                Sessions = [];
+
+            Sessions.Add(session);
         }
 
         public WorkoutSession[] GetUpcoming()
         {
+            if (Sessions == null)
+                return [];
+
             // Add content here
-            return listSessions.ToArray();  // This line should return only upcoming sessions
+
+            return Sessions.ToArray();  // This line should return only upcoming sessions
         }
 
         public WorkoutSession[] GetHistory()
         {
+            if (Sessions == null)
+                return [];
+
             // Add content here
-            return listSessions.ToArray();  // This line should return only past sessions
+
+            return Sessions.ToArray();  // This line should return only past sessions
         }
 
         // Maybe add more methods here

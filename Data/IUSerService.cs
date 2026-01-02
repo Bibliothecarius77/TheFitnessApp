@@ -1,4 +1,4 @@
-﻿/*
+/*
  * ZenMove - The Ultimate Fitness App
  *
  * IT-påbyggnad Utvecklare (Lexicon)
@@ -11,12 +11,13 @@
  *   Victoria Rådberg
  */
 
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using TheFitnessApp.Models;
 
 namespace TheFitnessApp.Data
 {
-    public class IdentityContext(DbContextOptions<IdentityContext> options) : IdentityDbContext(options)
+    public interface IUserService
     {
+        Task<AppUser?> GetCurrentUserAsync(ClaimsPrincipal principal);
     }
 }

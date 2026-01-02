@@ -1,4 +1,4 @@
-﻿/*
+/*
  * ZenMove - The Ultimate Fitness App
  *
  * IT-påbyggnad Utvecklare (Lexicon)
@@ -16,13 +16,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TheFitnessApp.Models
 {
-    [Table("Exercises")]                                   // DB table name
+    //[Table("Exercises")]                                   // DB table name
     public class Exercise
     {
-        [Key]                                              // EF Core - DB Primary Key
-        public int ExerciseID { get; set; }
-        [ForeignKey(nameof(WorkoutSession))]               // EF Core - DB Foreign Key
-        public int SessionID { get; set; }
+        //[Key]                                              // EF Core - DB Primary Key
+        public Guid ExerciseID { get; set; }
+        //[ForeignKey(nameof(WorkoutSession))]               // EF Core - DB Foreign Key
+        public Guid SessionID { get; set; }
+        public required WorkoutSession Session { get; set; }
         public ExerciseType Type { get; set; }
         public string? Category { get; set; }
         public int Sets { get; set; }

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * ZenMove - The Ultimate Fitness App
  *
  * IT-påbyggnad Utvecklare (Lexicon)
@@ -16,13 +16,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TheFitnessApp.Models
 {
-    [Table("UserProfiles")]                                // DB table name
+    //[Table("UserProfiles")]                                // DB table name
     public class UserProfile
     {
-        [Key]                                              // EF Core - DB Primary Key
-        public int ProfileID { get; set; }
-        [ForeignKey(nameof(User))]                         // EF Core - DB Foreign Key
-        public int UserID { get; set; }
+        //[Key]                                              // EF Core - DB Primary Key
+        public Guid ProfileID { get; set; }
+        public required AppUser User { get; set; }
+        //[ForeignKey(nameof(AppUser))]                      // EF Core - DB Foreign Key
+        public required Guid UserID { get; set; }          // EF Core - DB Foreign Key
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
         public string? AddrStreet { get; set; }
@@ -30,33 +31,28 @@ namespace TheFitnessApp.Models
         public string? AddrZip { get; set; }
         public required string AddrCity { get; set; }
         public required string AddrCountry { get; set; }
-        //public string AddrPhone { get; set; }
         public required DateTime DateOfBirth { get; set; }
         public int HeightCM { get; set; }
         public float WeightKG { get; set; }
 
         public UserProfile()
         {
-            // Add content here
         }
 
         // Do we need this constructor?
-        public UserProfile(string firstName, string lastName, string city, string country, DateTime dateOfBirth)
-        {
-            // Add content here
-        }
+        //public UserProfile(string firstName, string lastName, string city, string country, DateTime dateOfBirth)
+        //{
+        //}
 
         // Do we need this constructor?
-        public UserProfile(string firstName, string lastName, string street, int number, string zip,
-            string city, string country, DateTime dateOfBirth, int heightCM, float weightKG)
-        {
-
-            // Add content here
-        }
+        //public UserProfile(string firstName, string lastName, string street, int number, string zip,
+        //    string city, string country, DateTime dateOfBirth, int heightCM, float weightKG)
+        //{
+        //}
 
         public void UpdateProfile()
         {
-            // Add content here
+            // Add content here (?)
         }
 
         // Maybe add more methods here
