@@ -8,7 +8,7 @@
 
     <div class="dashboard">
 
-        <h1>Hej @Model.UserName!</h1>
+        <h1>Hi @Model.UserName!</h1>
 
         <!-- Snabbsummering -->
         <div class="summary">
@@ -16,13 +16,13 @@
             <div class="summary-item">
                 <div class="icon">💪</div>
                 <div class="value">@Model.TotalSessions</div>
-                <div class="label">Träningspass</div>
+                <div class="label">Workout session</div>
             </div>
 
             <div class="summary-item">
                 <div class="icon">🎯</div>
                 <div class="value">@Model.ActiveGoals</div>
-                <div class="label">Aktiva mål</div>
+                <div class="label">Active goal</div>
             </div>
 
         </div>
@@ -31,14 +31,14 @@
         <div class="summary-item">
             <div class="icon">⏱️</div>
             <div class="value">@Model.TotalMinutes min</div>
-            <div class="label">Total tid</div>
+            <div class="label">Total time</div>
         </div>
 
         <!-- Navigering -->
         <div class="actions">
-            <a class="btn" asp-controller="Workout" asp-action="AddSession">+ Lägg till träningspass</a>
-            <a class="btn" asp-controller="Goals" asp-action="Index">🎯 Sätt mål</a>
-            <a class="btn" asp-controller="Statistics" asp-action="Index">📊 Se statistik</a>
+            <a class="btn" asp-controller="Workout" asp-action="AddSession">+ Add workout sessions</a>
+            <a class="btn" asp-controller="Goals" asp-action="Index">🎯 My goals</a>
+            <a class="btn" asp-controller="Statistics" asp-action="Index">📊 Statistic</a>
         </div>
 
     </div>
