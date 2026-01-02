@@ -29,19 +29,19 @@
   <div class="mb-3">
     <label asp-for="StartTime" class="form-label"></label>
     <input asp-for="StartTime" type="datetime-local" 
-      class="form-control" min="@minDate" max="@maxDate" />
+      class="form-control" min="@minDate" max="@maxDate" required/>
   </div>
 
   <div class="mb-3">
     <label asp-for="EndTime" class="form-label"></label>
     <input asp-for="EndTime" type="datetime-local" 
-      class="form-control" min="@minDate" max="@maxDate" /> 
+      class="form-control" min="@minDate" max="@maxDate" required/> 
   </div>
                 
   <div class="mb-3">
     <label asp-for="TotalCalories" class="form-label"></label>
     <input asp-for="TotalCalories" type="number" 
-      class="form-control" />
+      class="form-control" required/>
   </div>
 
   <div class="d-flex justify-content-between mt-4">
@@ -52,7 +52,7 @@
     <a asp-controller="Workout" asp-action="Index"
       asp-route-id="@Model.ScheduleID"
       class="btn btn-secondary px-4 rounded-pill">
-      Cancel
+      Back to list
     </a>
   </div>
 </form>
