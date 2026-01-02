@@ -1,0 +1,60 @@
+﻿@model TheFitnessApp.Models.UserProfile
+@* Kopplar vyn till UserProfile *@
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <h1 class="mb-4">My Profile</h1>
+
+            <!-- Personlig information -->
+            <ul class="list-group mb-4">
+
+                <li class="list-group-item">
+                    <strong>Name:</strong>
+                    @Model.FirstName @Model.LastName
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Date of Birth:</strong>
+                    @Model.DateOfBirth.ToShortDateString()
+                </li>
+
+                <li class="list-group-item">
+                    <strong>City:</strong>
+                    @Model.AddrCity
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Country:</strong>
+                    @Model.AddrCountry
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Height:</strong>
+                    @Model.HeightCM cm
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Weight:</strong>
+                    @Model.WeightKG kg
+                </li>
+
+            </ul>
+
+            <!-- Navigation -->
+            <a asp-action="Statistics" class="btn btn-primary">
+                View Statistics
+            </a>
+
+            <a asp-action="Goals" class="btn btn-secondary ms-2">
+                View Goals
+            </a>
+
+        </div>
+    </div>
+</div>

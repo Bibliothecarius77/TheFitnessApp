@@ -55,23 +55,17 @@ namespace TheFitnessApp.Models
         }
 
         public WorkoutSession[] GetUpcoming()
-        {
-            if (Sessions == null)
-                return [];
-
-            // Add content here
-
-            return Sessions.ToArray();  // This line should return only upcoming sessions
+        { 
+            return listSessions
+              .Where(s => s.StartTime >= DateTime.Now)
+              .OrderBy(s => s.StartTime).ToArray();
         }
 
         public WorkoutSession[] GetHistory()
         {
-            if (Sessions == null)
-                return [];
-
-            // Add content here
-
-            return Sessions.ToArray();  // This line should return only past sessions
+            return listSessions
+              .Where(s => s.EndTime < DateTime.Now)
+              .OrderByDescending(s => s.StartTime).ToArray();
         }
 
         // Maybe add more methods here

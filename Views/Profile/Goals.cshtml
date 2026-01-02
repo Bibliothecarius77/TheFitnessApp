@@ -1,0 +1,78 @@
+﻿@* Vyn tar emot en lista av träningsmål *@
+@model IEnumerable<TheFitnessApp.Models.WorkoutGoal>
+
+@{
+    // Sidtitel som kan användas i layout
+    ViewData["Title"] = "My Goals";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <!-- Rubrik -->
+            <h1 class="mb-4">My Goals</h1>
+
+            @* Knapp som leder till GoalController → Create *@
+            <a asp-controller="Goal"
+               asp-action="Create"
+               class="btn btn-success mb-3">
+                Create New Goal
+            </a>
+
+            @* Lista med alla träningsmål *@
+            <ul class="list-group mb-4">
+
+                @* Loopar igenom varje mål som skickats från ProfileController *@
+                @foreach (var goal in Model)
+                {
+                    <li class="list-group-item">
+
+                        <!-- Visar information om målet -->
+                        <strong>Type:</strong> @goal.Type <br />
+                        <strong>Target:</strong> @goal.TargetValue <br />
+                        <strong>Deadline:</strong> @goal.Deadline.ToShortDateString() <br />
+
+                        <strong>Status:</strong>
+                        @(goal.IsCompleted ? "Completed" : "Not completed")
+
+                        <br /><br />
+
+                        @* Länk till GoalController → Details *@
+                        <a asp-controller="Goal"
+                           asp-action="Details"
+                           asp-route-id="@goal.GoalID"
+                           class="btn btn-sm btn-primary">
+                            Details
+                        </a>
+
+                        @* Länk till GoalController → Edit *@
+                        <a asp-controller="Goal"
+                           asp-action="Edit"
+                           asp-route-id="@goal.GoalID"
+                           class="btn btn-sm btn-warning ms-1">
+                            Edit
+                        </a>
+
+                        @* Länk till GoalController → Delete *@
+                        <a asp-controller="Goal"
+                           asp-action="Delete"
+                           asp-route-id="@goal.GoalID"
+                           class="btn btn-sm btn-danger ms-1">
+                            Delete
+                        </a>
+
+                    </li>
+                }
+            </ul>
+
+            @* Tillbaka till profilsidan *@
+            <a asp-controller="Profile"
+               asp-action="Index"
+               class="btn btn-secondary">
+                Back to profile
+            </a>
+
+        </div>
+    </div>
+</div>

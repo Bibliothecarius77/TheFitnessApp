@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using TheFitnessApp.Models;
+using TheFitnessApp_1.Models;
 
-namespace TheFitnessApp.Controllers
+namespace TheFitnessApp_1.Controllers
 {
     public class HomeController : Controller
     {
@@ -11,15 +10,17 @@ namespace TheFitnessApp.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Welcome()
         {
-            return View();
-        }
+            var model = new DashboardViewModel
+            {
+                UserName = "Anna",       // Backend byter ut detta senare
+                TotalSessions = 0,
+                ActiveGoals = 0,
+                TotalMinutes = 0
+            };
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(model);
         }
     }
 }

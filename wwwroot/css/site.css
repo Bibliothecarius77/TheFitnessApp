@@ -1,31 +1,83 @@
-html {
-  font-size: 14px;
+/* Grundinställningar */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+
+    /* Bakgrund */
+    background: url('/images/Zenmove-background.jpg') no-repeat center center fixed;
+    background-size: cover;
+
+    /* Lås sidan */
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+/* Kortets stil (glas-effekt) */
+.zenmove-card {
+    background-color: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 380px;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+/* Loggans stil */
+.zenmove-logo {
+    max-width: 200px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+/* Knappar */
+.btn-primary {
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
-body {
-  margin-bottom: 60px;
+.btn-outline-secondary {
+    border-color: #1861ac;
+    color: #1861ac;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+.btn-outline-secondary:hover {
+    background-color: #1861ac;
+    color: #1861ac;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+/* Mobilanpassning */
+@media (max-width: 768px) {
+    html, body {
+        background-attachment: scroll; /* fix för iOS */
+        background-size: cover;
+    }
+
+    .zenmove-card {
+        margin: 40px 20px 20px 20px; /* extra topmarginal på mobil */
+        padding: 15px;
+        width: 100%;
+        max-width: 340px;
+    }
+
+    .zenmove-logo {
+        max-width: 150px;
+    }
+}
+/* Blå knappstil */
+.btn-primary {
+    background-color: #1b6ec2;   /* ZenMove-blå */
+    border-color: #1861ac;       /* lite mörkare kant */
+    color: #fff;                 /* vit text */
+}
+
+/* Hover-effekt */
+.btn-primary:hover {
+    background-color: #1861ac;   /* mörkare blå vid hover */
+    border-color: #144b8a;       /* ännu mörkare kant */
+    color: #fff;
 }
