@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using TheFitnessApp.Data;
 using TheFitnessApp.Models;
 
@@ -6,63 +6,26 @@ namespace TheFitnessApp.Controllers
 {
     public class ExerciseController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IRepository<Exercise> _exerciseRepo;
 
-        public ExerciseController(ApplicationDbContext context)
+        public ExerciseController(IRepository<Exercise> exerciseRepo)
         {
-            _context = context;
+            _exerciseRepo = exerciseRepo;
         }
 
         // GET: /Exercise
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            // TODO: Hämta data via Repository när det är implementerat
-            var exercises = new List<Exercise>
-            {
-                new Exercise
-                {
-                    ExerciseID = 1,
-                    SessionID = 1,
-                    Type = ExerciseType.Cardio,
-                    Category = "Test exercise",
-                    Sets = 3,
-                    Reps = 10,
-                    WeightKG = 50,
-                    CaloriesBurnt = 200,
-                    METValue = 5.5f
-                },
-                new Exercise
-                {
-                    ExerciseID = 2,
-                    SessionID = 1,
-                    Type = ExerciseType.Strength,
-                    Category = "Test exercise",
-                    Sets = 4,
-                    Reps = 8,
-                    WeightKG = 70,
-                    CaloriesBurnt = 250,
-                    METValue = 6.0f
-                }
-            };
-
+            var exercises = await _exerciseRepo.GetAsync();
             return View(exercises);
         }
 
         // GET: /Exercise/Details/{id}
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            var exercise = new Exercise
-            {
-                ExerciseID = id,
-                SessionID = 1,
-                Type = ExerciseType.Cardio,
-                Category = "Test exercise",
-                Sets = 3,
-                Reps = 10,
-                WeightKG = 50,
-                CaloriesBurnt = 200,
-                METValue = 5.5f
-            };
+            var exercise = await _exerciseRepo.GetByIDAsync(id);
+            if (exercise == null)
+                return NotFound();
 
             return View(exercise);
         }
@@ -75,59 +38,59 @@ namespace TheFitnessApp.Controllers
 
         // POST: /Exercise/Create
         [HttpPost]
-        public IActionResult Create(Exercise exercise)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Exercise exercise)
         {
-            // TODO: Skapa via Repository
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                await _exerciseRepo.InsertAsync(exercise);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(exercise);
         }
 
         // GET: /Exercise/Edit/{id}
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            // TODO: Hämta via Repository
-            //return View();
-            var exercise = new Exercise
-            {
-                ExerciseID = id,
-                Category = "Strength",
-                Sets = 3,
-                Reps = 10,
-                WeightKG = 50,
-                METValue = 6.0f,
-                CaloriesBurnt = 200
-            };
+            var exercise = await _exerciseRepo.GetByIDAsync(id);
+            if (exercise == null)
+                return NotFound();
+
             return View(exercise);
         }
 
         // POST: /Exercise/Edit/{id}
         [HttpPost]
-        public IActionResult Edit(int id, Exercise exercise)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, Exercise exercise)
         {
-            // TODO: Uppdatera via Repository
-            return RedirectToAction(nameof(Index));
+            if (id != exercise.ExerciseID)
+                return BadRequest();
+
+            if (ModelState.IsValid)
+            {
+                await _exerciseRepo.UpdateAsync(exercise);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(exercise);
         }
 
         // GET: /Exercise/Delete/{id}
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var exercise = new Exercise
-            {
-                ExerciseID = id,
-                Category = "Strength",
-                Sets = 3,
-                Reps = 10,
-                WeightKG = 50,
-                CaloriesBurnt = 200
-            };
+            var exercise = await _exerciseRepo.GetByIDAsync(id);
+            if (exercise == null)
+                return NotFound();
 
             return View(exercise);
         }
 
         // POST: /Exercise/DeleteConfirmed/{id}
-        [HttpPost]
-        public IActionResult DeleteConfirmed(int id)
+        [HttpPost, ActionName("DeleteConfirmed")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            // TODO: Ta bort via Repository
+            await _exerciseRepo.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * ZenMove - The Ultimate Fitness App
  *
  * IT-påbyggnad Utvecklare (Lexicon)
@@ -11,18 +11,13 @@
  *   Victoria Rådberg
  */
 
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace TheFitnessApp.Models
 {
-    [Table("Exercises")]                                   // DB table name
     public class Exercise
     {
-        [Key]                                              // EF Core - DB Primary Key
-        public int ExerciseID { get; set; }
-        [ForeignKey(nameof(WorkoutSession))]               // EF Core - DB Foreign Key
-        public int SessionID { get; set; }
+        public Guid ExerciseID { get; set; }
+        public Guid SessionID { get; set; }
+        public required WorkoutSession Session { get; set; }
         public ExerciseType Type { get; set; }
         public string? Category { get; set; }
         public int Sets { get; set; }

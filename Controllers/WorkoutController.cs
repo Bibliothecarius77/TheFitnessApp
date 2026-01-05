@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using TheFitnessApp.Data;
 using TheFitnessApp.Models;
 
@@ -7,156 +7,130 @@ namespace TheFitnessApp.Controllers
     // Controller för träningspass (WorkoutSession)
     public class WorkoutController : Controller
     {
-        // Databaskontext
-        private readonly ApplicationDbContext _context;
+        private readonly IRepository<WorkoutSession> _workoutRepo;
+        private readonly IRepository<WorkoutSchedule> _scheduleRepo; // 🎯 Repository för scheman
 
-        // Konstruktor med Dependency Injection. ASP.NET Core skickar in ApplicationDbContext automatiskt.
-        public WorkoutController(ApplicationDbContext context)
+        public WorkoutController(
+            IRepository<WorkoutSession> workoutRepo,
+            IRepository<WorkoutSchedule> scheduleRepo) // 🎯 Dependency Injection
         {
-            _context = context; // Gör databasen tillgänglig i controllern för att läsa och spara data
+            _workoutRepo = workoutRepo;
+            _scheduleRepo = scheduleRepo;
         }
 
         // GET: /Workout
-        // Visar alla träningspas
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var schedule = new WorkoutSchedule();
-            schedule.listSessions.AddRange(new[]
-            {
-                new WorkoutSession
-                {
-                    SessionID = 1,
-                    ScheduleID = 1,
-                    StartTime = DateTime.Now.AddDays(1),
-                    EndTime = DateTime.Now.AddDays(1).AddHours(1),
-                    TotalCalories = 450
-                },
-                new WorkoutSession
-                {
-                    SessionID = 2,
-                    ScheduleID = 1,
-                    StartTime = DateTime.Now.AddDays(-2),
-                    EndTime = DateTime.Now.AddDays(-2).AddHours(1),
-                    TotalCalories = 300
-                },
-                new WorkoutSession
-                {
-                    SessionID = 3,
-                    ScheduleID = 2,
-                    StartTime = DateTime.Now.AddDays(3),
-                    EndTime = DateTime.Now.AddDays(3).AddHours(1),
-                    TotalCalories = 500
-                }
-            });
-
-            // TODO: Hämta träningspass via Repository när det är implementerat
-            return View(schedule.listSessions);
+            var sessions = await _workoutRepo.GetAsync();
+            return View(sessions);
         }
 
-        // READ – visa detaljer för ett träningspass
         // GET: /Workout/Details/{id}
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            // Här ska ett specifikt träningspass hämtas via Repository baserat på id 
-            var session = new WorkoutSession
-            {
-                SessionID = id,
-                ScheduleID = 1,
-                StartTime = DateTime.Now.AddDays(-1),
-                EndTime = DateTime.Now.AddDays(-1).AddHours(1),
-                TotalCalories = 400
-            };
+            var session = await _workoutRepo.GetByIDAsync(id);
+            if (session == null) return NotFound();
             return View(session);
         }
 
         // GET: /Workout/Create
-        [HttpGet]
-        public IActionResult Create(int id)
+        public async Task<IActionResult> Create(Guid? scheduleId)
         {
-            // TEMP sample data (replace with DB later)
+            if (scheduleId == null) return BadRequest();
+
+            // Hämta schemat från repository
+            var schedule = await _scheduleRepo.GetByIDAsync(scheduleId.Value);
+            if (schedule == null) return NotFound();
+
+            // Skicka start/slut till ViewBag för vyn (null-säker)
+            ViewBag.ScheduleStart = schedule?.StartDate ?? DateTime.Now;
+            ViewBag.ScheduleEnd = schedule?.EndDate ?? DateTime.Now.AddHours(1);
+
             var session = new WorkoutSession
             {
-                ScheduleID = id,
-                StartTime = DateTime.Now,
-                EndTime = DateTime.Now.AddHours(1),
-                TotalCalories = 200
+                SessionID = Guid.NewGuid(),
+                ScheduleID = scheduleId.Value,
+                Schedule = schedule, //  Required property måste sättas
+                StartTime = schedule.StartDate,
+                EndTime = schedule.StartDate.AddHours(1) // default 1 timme
             };
-
-            // Pass date limits to View
-            //ViewBag.ScheduleStart = schedule.StartDate;
-            //ViewBag.ScheduleEnd = schedule.EndDate;
 
             return View(session);
         }
-        // CREATE – spara nytt träningspass
+
         // POST: /Workout/Create
         [HttpPost]
-        public IActionResult Create(WorkoutSession workoutSession)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(WorkoutSession workoutSession)
         {
-            // TODO: Skapa nytt träningspass via Repository
+            if (ModelState.IsValid)
+            {
+                workoutSession.SessionID = Guid.NewGuid();
+                await _workoutRepo.InsertAsync(workoutSession);
+                return RedirectToAction("Details", "Schedule", new { id = workoutSession.ScheduleID });
+            }
 
-            return RedirectToAction(nameof(Index));
+            // Om ModelState är ogiltig, hämta schemat igen för ViewBag
+            var schedule = await _scheduleRepo.GetByIDAsync(workoutSession.ScheduleID);
+            ViewBag.ScheduleStart = schedule?.StartDate ?? DateTime.Now;
+            ViewBag.ScheduleEnd = schedule?.EndDate ?? DateTime.Now.AddHours(1);
+
+            return View(workoutSession);
         }
 
-
-        // UPDATE – visa formulär för redigering
         // GET: /Workout/Edit/{id}
-        [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            // TEMP sample data (replace with DB later)
-            var session = new WorkoutSession
-            {
-                SessionID = id,
-                ScheduleID = 1,
-                StartTime = DateTime.Now,
-                EndTime = DateTime.Now.AddHours(1),
-                TotalCalories = 400
-            };
-            
-            // Pass date limits to View
-            //ViewBag.ScheduleStart = schedule.StartDate;
-            //ViewBag.ScheduleEnd = schedule.EndDate;
+            var session = await _workoutRepo.GetByIDAsync(id);
+            if (session == null) return NotFound();
+
+            // Null-säker ViewBag för start/slut (om du använder det i vyn)
+            ViewBag.ScheduleStart = session.Schedule?.StartDate ?? DateTime.Now;
+            ViewBag.ScheduleEnd = session.Schedule?.EndDate ?? DateTime.Now.AddHours(1);
 
             return View(session);
         }
 
-
-        // UPDATE – spara ändringar
         // POST: /Workout/Edit/{id}
         [HttpPost]
-        public IActionResult Edit(int id, WorkoutSession workoutSession)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, WorkoutSession workoutSession)
         {
-            // TODO: Uppdatera träningspass via Repository
+            if (id != workoutSession.SessionID) return BadRequest();
 
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                await _workoutRepo.UpdateAsync(workoutSession);
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Om ModelState är ogiltig, hämta schemat igen för ViewBag
+            var schedule = await _scheduleRepo.GetByIDAsync(workoutSession.ScheduleID);
+            ViewBag.ScheduleStart = schedule?.StartDate ?? DateTime.Now;
+            ViewBag.ScheduleEnd = schedule?.EndDate ?? DateTime.Now.AddHours(1);
+
+            return View(workoutSession);
         }
 
-        
-        // DELETE – visa bekräftelse
         // GET: /Workout/Delete/{id}
-        [HttpGet]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var session = new WorkoutSession
-            {
-                SessionID = id,
-                ScheduleID = 2,
-                StartTime = DateTime.Now.AddDays(-1),
-                EndTime = DateTime.Now.AddDays(-1).AddHours(1),
-                TotalCalories = 300
-            };
+            var session = await _workoutRepo.GetByIDAsync(id);
+            if (session == null) return NotFound();
             return View(session);
         }
 
-        
-        // DELETE – ta bort träningspass
         // POST: /Workout/DeleteConfirmed/{id}
-        [HttpPost]
-        public IActionResult DeleteConfirmed(int id)
+        [HttpPost, ActionName("DeleteConfirmed")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            // TODO: Ta bort träningspass via Repository
-
+            var session = await _workoutRepo.GetByIDAsync(id);
+            if (session != null)
+            {
+                await _workoutRepo.DeleteAsync(id);
+                return RedirectToAction("Details", "Schedule", new { id = session.ScheduleID });
+            }
             return RedirectToAction(nameof(Index));
         }
     }

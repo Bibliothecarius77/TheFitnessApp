@@ -1,4 +1,4 @@
-﻿/*
+/*
  * ZenMove - The Ultimate Fitness App
  *
  * IT-påbyggnad Utvecklare (Lexicon)
@@ -11,21 +11,16 @@
  *   Victoria Rådberg
  */
 
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace TheFitnessApp.Models
 {
-    [Table("Goals")]                                       // DB table name
     public class WorkoutGoal
     {
-        [Key]                                              // EF Core - DB Primary Key
-        public int GoalID { get; set; }
-        [ForeignKey(nameof(User))]                         // EF Core - DB Foreign Key
-        public int UserID { get; set; }
+        public Guid GoalID { get; set; }
+        public required AppUser User { get; set; }
+        public required Guid UserID { get; set; }          // EF Core - DB Foreign Key
         public GoalType Type { get; set; }
         public int TargetValue { get; set; }
-        public DateTime Deadline { get; set; }
+        public DateTime TargetDate { get; set; }
         public required bool IsCompleted { get; set; }
 
         public WorkoutGoal()

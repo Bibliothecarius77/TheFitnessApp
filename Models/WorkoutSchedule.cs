@@ -1,4 +1,4 @@
-﻿/*
+/*
  * ZenMove - The Ultimate Fitness App
  *
  * IT-påbyggnad Utvecklare (Lexicon)
@@ -11,29 +11,23 @@
  *   Victoria Rådberg
  */
 
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace TheFitnessApp.Models
 {
-    [Table("Schedules")]                                   // DB table name
     public class WorkoutSchedule
     {
-        [Key]                                              // EF Core - DB Primary Key
-        public int ScheduleID { get; set; } 
-        [ForeignKey(nameof(User))]                         // EF Core - DB Foreign Key
-        public int UserID { get; set; }
+        public Guid ScheduleID { get; set; }
+        public required AppUser User { get; set; }
+        public required Guid UserID { get; set; }          // EF Core - DB Foreign Key
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string? Notes { get; set; }
 
-        //private List<WorkoutSession> listSessions;
-        public List<WorkoutSession> listSessions = new List<WorkoutSession>();
+        // Navigation properties for one-to-many relationsips
+        //public ICollection<WorkoutSession> Sessions { get; set; } = new List<WorkoutSession>();
+        public List<WorkoutSession> Sessions { get; set; } = new List<WorkoutSession>();
 
         public WorkoutSchedule()
         {
-            listSessions = new List<WorkoutSession>();
-
             // Add content here
         }
 
@@ -49,19 +43,36 @@ namespace TheFitnessApp.Models
 
         public void AddSession(WorkoutSession session)
         {
-            listSessions.Add(session);
+            if (Sessions == null)
+                Sessions = [];
+
+            Sessions.Add(session);
+        }
+
+        public void AddSessionRange(WorkoutSession[] listSessions)
+        {
+            if (Sessions == null)
+                Sessions = [];
+
+            Sessions.AddRange(listSessions);
         }
 
         public WorkoutSession[] GetUpcoming()
-        { 
-            return listSessions
+        {
+            if (Sessions == null)
+                return [];
+
+            return Sessions
               .Where(s => s.StartTime >= DateTime.Now)
               .OrderBy(s => s.StartTime).ToArray();
         }
 
         public WorkoutSession[] GetHistory()
         {
-            return listSessions
+            if (Sessions == null)
+                return [];
+
+            return Sessions
               .Where(s => s.EndTime < DateTime.Now)
               .OrderByDescending(s => s.StartTime).ToArray();
         }

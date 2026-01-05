@@ -11,35 +11,68 @@
  *   Victoria Rådberg
  */
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TheFitnessApp.Data;
+using TheFitnessApp.Models;
 
 namespace TheFitnessApp
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Databas (behövs för backend-teamet, men påverkar inte din frontend)
+            // Add services to the container
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            // Add database connection with options, including seeding data
+            builder.Services.AddDbContext<UnifiedContext>(options =>
+            {
+                options.UseSqlServer(connectionString);
 
+                options.UseSeeding((context, _) =>
+                {
+                    // Create ASP.NET Identity Roles
+                    UserOperations.CreateDefaultRolesAsync((UnifiedContext)context, CancellationToken.None).Wait();
+
+                    // Seed app users (both admins and regular users) plus some fitness data
+                    UserOperations.SeedTestUsersAsync((UnifiedContext)context, CancellationToken.None).Wait();
+                });
+
+                options.UseAsyncSeeding(async (context, _hasSchema, _cancellationToken) =>
+                {
+                    // Create ASP.NET Identity Roles
+                    await UserOperations.CreateDefaultRolesAsync((UnifiedContext)context, _cancellationToken);
+
+                    // Seed app users (both admins and regular users)
+                    await UserOperations.SeedTestUsersAsync((UnifiedContext)context, _cancellationToken);
+                });
+            });
+
+            // Middleware to help detect and diagnose errors with Entity Framework Core migrations (can be removed)
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+            builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole<Guid>>()
+                .AddEntityFrameworkStores<UnifiedContext>();
 
             // Endast MVC-controllers och views (ingen Identity UI, ingen scaffoldad CSS)
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
 
-            // Pipeline
+            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
+
+                // Automatically apply any pending database migrations
+                using var scope = app.Services.CreateScope();
+                var context = scope.ServiceProvider.GetRequiredService<UnifiedContext>();
+                await context.Database.MigrateAsync();
             }
             else
             {
@@ -52,7 +85,10 @@ namespace TheFitnessApp
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.MapStaticAssets();
 
             // ROUTING
             // Steg 1 – Index är startsidan

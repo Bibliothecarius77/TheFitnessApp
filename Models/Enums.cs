@@ -1,4 +1,4 @@
-﻿/*
+/*
  * ZenMove - The Ultimate Fitness App
  *
  * IT-påbyggnad Utvecklare (Lexicon)
@@ -15,23 +15,23 @@ namespace TheFitnessApp.Models
 {
     public enum UserRole
     {
-        Admin = 0,
-        Regular = 2
+        Admin,
+        User
     }
 
     public enum ExerciseType
     {
-        Balance = 0,
-        Cardio = 1,
-        Flexibility = 2,
-        Strength = 3
+        Balance,
+        Cardio,
+        Flexibility,
+        Strength
     }
 
     public enum GoalType
     {
-        WeightLoss = 0,
-        MuscleGain = 1,
-        Endurance = 2,
-        WorkoutFrequency = 3
+        WeightLoss,
+        MuscleGain,
+        Endurance,
+        WorkoutFrequency
     }
 }
