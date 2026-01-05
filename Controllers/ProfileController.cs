@@ -14,7 +14,7 @@ namespace TheFitnessApp.Controllers
         {
             _context = context;
         }
-
+/*
         // GET: /Profile
         // Visar användarens profil
         public IActionResult Index()
@@ -61,5 +61,6 @@ namespace TheFitnessApp.Controllers
             // TODO: Hämta användarens statistik via Repository
             return View();
         }
+*/
     }
 }

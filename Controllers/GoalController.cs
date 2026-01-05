@@ -16,7 +16,7 @@ namespace TheFitnessApp.Controllers
         {
             _context = context;
         }
-
+/*
         // READ – visa alla träningsmål
         // GET: /Goal
         public IActionResult Index()
@@ -127,5 +127,6 @@ namespace TheFitnessApp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+*/
     }
 }

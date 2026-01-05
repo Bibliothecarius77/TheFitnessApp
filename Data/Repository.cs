@@ -17,16 +17,23 @@ namespace TheFitnessApp.Data
 {
     public interface IRepository<T> where T : class
     {
+        // CRUD - Create
+        void Insert(T entity);
+        Task InsertAsync(T entity);
+
+        // CRUD - Read
         IEnumerable<T> Get();
         Task<IEnumerable<T>> GetAsync();
         T? GetByID(int id);
         Task<T?> GetByIDAsync(int id);
-        void Insert(T entity);
-        Task InsertAsync(T entity);
-        void Delete(int id);
-        Task DeleteAsync(int id);
+
+        // CRUD - Update
         void Update(T entity);
         Task UpdateAsync(T entity);
+
+        // CRUD - Deleete
+        void Delete(int id);
+        Task DeleteAsync(int id);
     }
 
     public class Repository<T> : IRepository<T> where T : class
@@ -38,6 +45,18 @@ namespace TheFitnessApp.Data
         {
             _context = dbContext;
             _dbSet = _context.Set<T>();
+        }
+
+        public void Insert(T entity)
+        {
+            _dbSet.Add(entity);
+            _context.SaveChanges();
+        }
+
+        public async Task InsertAsync(T entity)
+        {
+            await _dbSet.AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
         public IEnumerable<T> Get()
@@ -60,22 +79,10 @@ namespace TheFitnessApp.Data
             return await _dbSet.FindAsync(id);
         }
 
-        public void Insert(T entity)
-        {
-            _dbSet.Add(entity);
-            _context.SaveChangesAsync();
-        }
-
-        public async Task InsertAsync(T entity)
-        {
-            _dbSet.Add(entity);
-            await _context.SaveChangesAsync();
-        }
-
         public void Update(T entity)
         {
             _dbSet.Update(entity);
-            _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public async Task UpdateAsync(T entity)
@@ -91,7 +98,7 @@ namespace TheFitnessApp.Data
             if (data != null)
                 _dbSet.Remove(data);
 
-            _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public async Task DeleteAsync(int id)

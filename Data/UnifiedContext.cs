@@ -14,7 +14,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
 using TheFitnessApp.Models;
 
 namespace TheFitnessApp.Data
@@ -40,7 +39,7 @@ namespace TheFitnessApp.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            SeedData(optionsBuilder);
+            //SeedData(optionsBuilder);
         }
 
         private static void ConfigureDomain(ModelBuilder builder)
@@ -101,18 +100,33 @@ namespace TheFitnessApp.Data
                 .HasForeignKey(s => s.SessionID);
         }
 
+/*
         private void SeedData(DbContextOptionsBuilder optionsBuilder)
         {
-/*
-            optionsBuilder.UseSqlServer("<ConnectionString>")
-                          .UseSeeding((context, _) =>
-                          {
-                              if (!context.Set<Person>().Any(x => x.Name == "Felipe"))
-                              {
-                                  context.Set<Person>().Add(new Person { Name = "Felipe" });
-                                  context.SaveChanges();
-                              }
-                          });
+            optionsBuilder.UseSqlServer("<ConnectionString>").UseSeeding((context, _) =>
+            {
+                if (!context.Set<AppUser>().Any(x => x.UserName == "Guest"))
+                {
+                    context.Set<AppUser>().Add(new AppUser
+                    {
+                        UserName = "Guest",
+                        NormalizedUserName = "GUEST",
+                        Email = "guest@gmail.com",
+                        NormalizedEmail = "GUEST@GMAIL.COM",
+                        EmailConfirmed = true
+                    });
+                }
+
+                if (!context.Set<UserProfile>().Any(x => x.Name == "Felipe"))
+                {
+                    context.Set<UserProfile>().Add(new UserProfile
+                    {
+                        Name = "Felipe"
+                    });
+                }
+ 
+                context.SaveChanges();
+            });
 
 
 
@@ -187,7 +201,7 @@ namespace TheFitnessApp.Data
                     EmailConfirmed = true
                 }
             ]);
-*/
         }
+*/
     }
 }

@@ -20,41 +20,47 @@ namespace TheFitnessApp
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Add services to the container
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-            // Add database connection.
-            builder.Services.AddDbContext<UnifiedContext>(options => options.UseSqlServer(connectionString));
+            // Add database connection with options, including seeding data
+            builder.Services.AddDbContext<UnifiedContext>(options =>
+            {
+                options.UseSqlServer(connectionString);
 
-            // Middleware to help detect and diagnose errors with Entity Framework Core migrations. (Can be removed.)
+                options.UseSeeding((context, _) =>
+                {
+                    // Create ASP.NET Identity Roles
+                    UserOperations.CreateDefaultRolesAsync((UnifiedContext)context, CancellationToken.None).Wait();
+
+                    // Seed app users (both admins and regular users) plus some fitness data
+                    UserOperations.SeedTestUsersAsync((UnifiedContext)context, CancellationToken.None).Wait();
+                });
+
+                options.UseAsyncSeeding(async (context, _hasSchema, _cancellationToken) =>
+                {
+                    // Create ASP.NET Identity Roles
+                    await UserOperations.CreateDefaultRolesAsync((UnifiedContext)context, _cancellationToken);
+
+                    // Seed app users (both admins and regular users)
+                    await UserOperations.SeedTestUsersAsync((UnifiedContext)context, _cancellationToken);
+                });
+            });
+
+            // Middleware to help detect and diagnose errors with Entity Framework Core migrations (can be removed)
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            //    .AddEntityFrameworkStores<UnifiedContext>();
-            //builder.Services.AddDefaultIdentity<AppUser>()
-            //    .AddRoles<IdentityRole>()
-            //    .AddEntityFrameworkStores<UnifiedContext>();
-            //builder.Services.AddDefaultIdentity<AppUser>()
-            //    .AddEntityFrameworkStores<UnifiedContext>()
-            //    .AddDefaultTokenProviders()
-            //    .AddDefaultUI();
             builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<UnifiedContext>();
-            //builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<UnifiedContext>();
-            //builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = true)
-            //    .AddEntityFrameworkStores<UnifiedContext>();
 
             // Endast MVC-controllers och views (ingen Identity UI, ingen scaffoldad CSS)
             builder.Services.AddControllersWithViews();
-
-            //builder.Services.AddScoped<IRepository, Repository>();
-            builder.Services.AddScoped<IUserService, UserService>();
 
             var app = builder.Build();
 
@@ -62,6 +68,11 @@ namespace TheFitnessApp
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
+
+                // Automatically apply any pending database migrations
+                using var scope = app.Services.CreateScope();
+                var context = scope.ServiceProvider.GetRequiredService<UnifiedContext>();
+                await context.Database.MigrateAsync();
             }
             else
             {
@@ -76,21 +87,6 @@ namespace TheFitnessApp
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            using (IServiceScope scope = app.Services.CreateScope())
-            {
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
-                UserManager<AppUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-
-                // Create default Identity roles ('User' and 'Admin') if they don't already exist
-                UserOperations.CreateDefaultRolesAsync(roleManager).Wait();
-
-                // Create test users (the app makers plus a guest) if they don't already exist
-                UserOperations.SeedTestUsersAsync(userManager).Wait();
-
-                // Verify that at least one user now exists.
-                //UserOperations.VerifyUserAsync(userManager, roleManager, "Jacob").Wait();
-            }
 
             app.MapStaticAssets();
 

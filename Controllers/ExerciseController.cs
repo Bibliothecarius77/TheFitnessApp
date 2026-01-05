@@ -12,7 +12,7 @@ namespace TheFitnessApp.Controllers
         {
             _context = context;
         }
-
+/*
         // GET: /Exercise
         public IActionResult Index()
         {
@@ -97,5 +97,6 @@ namespace TheFitnessApp.Controllers
             // TODO: Ta bort via Repository
             return RedirectToAction(nameof(Index));
         }
+*/
     }
 }

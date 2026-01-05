@@ -15,7 +15,7 @@ namespace TheFitnessApp.Controllers
         {
             _context = context; // Gör databasen tillgänglig i controllern för att läsa och spara data
         }
-
+/*
         // GET: /Workout
         // Visar alla träningspas
         public IActionResult Index()
@@ -174,5 +174,6 @@ namespace TheFitnessApp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+*/
     }
 }

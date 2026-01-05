@@ -1,4 +1,4 @@
-﻿@* Vyn tar emot en lista av träningsmål *@
+@* Vyn tar emot en lista av träningsmål *@
 @model IEnumerable<TheFitnessApp.Models.WorkoutGoal>
 
 @{
@@ -31,7 +31,7 @@
                         <!-- Visar information om målet -->
                         <strong>Type:</strong> @goal.Type <br />
                         <strong>Target:</strong> @goal.TargetValue <br />
-                        <strong>Deadline:</strong> @goal.Deadline.ToShortDateString() <br />
+                        <strong>Deadline:</strong> @goal.TargetDate.ToShortDateString() <br />
 
                         <strong>Status:</strong>
                         @(goal.IsCompleted ? "Completed" : "Not completed")

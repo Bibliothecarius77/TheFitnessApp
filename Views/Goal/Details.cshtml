@@ -1,4 +1,4 @@
-﻿@model TheFitnessApp.Models.WorkoutGoal
+@model TheFitnessApp.Models.WorkoutGoal
 @* Visar detaljer för ett specifikt mål *@
 @* kräver att controllern skickar ett WorkoutGoal-objekt (senare via Repository). *@
 @{
@@ -19,7 +19,7 @@
                     <strong>Target:</strong> @Model.TargetValue
                 </li>
                 <li class="list-group-item">
-                    <strong>Deadline:</strong> @Model.Deadline.ToShortDateString()
+                    <strong>Deadline:</strong> @Model.TargetDate.ToShortDateString()
                 </li>
                 <li class="list-group-item">
                     <strong>Status:</strong> @(Model.IsCompleted ? "Completed" : "Not completed")

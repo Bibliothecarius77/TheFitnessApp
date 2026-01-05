@@ -15,7 +15,7 @@ namespace TheFitnessApp.Controllers
         {
             _context = context;  // Sparar kontexten så den kan användas i hela controllern, t.ex. för att läsa och skriva till databasen.
         }
-
+/*
         // GET: /Schedule
         // Hämtar alla träningsscheman från databasen
         public IActionResult Index()
@@ -43,7 +43,6 @@ namespace TheFitnessApp.Controllers
 
             return View(schedules);
         }
-
 
         // public WorkoutSchedule TestSchedule(int id)
         // {   // Empty history and upcoming schedule
@@ -215,5 +214,6 @@ namespace TheFitnessApp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+*/
     }
 }
