@@ -5,6 +5,7 @@
 
 # User-specific files
 .editorconfig
+appsettings.json
 GlobalSuppressions.cs
 *.rsuser
 *.suo
