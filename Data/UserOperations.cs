@@ -97,9 +97,6 @@ namespace TheFitnessApp.Data
                     {
                         resultTwo = await userManager.AddToRoleAsync(user, UserRole.User.ToString());
 
-                        //if (!resultTwo.Succeeded)
-                        //    throw new Exception("Unable to add user " + user.UserName + " to IdentityRole '" + UserRole.User.ToString() + "'.");
-
                         if (resultTwo.Succeeded)
                         {
                             // Seed app users (both admins and regular users)
@@ -193,7 +190,7 @@ namespace TheFitnessApp.Data
                 ScheduleID = schedule.ScheduleID,
                 StartTime = new DateTime(2026, 1, 4, 9, 0, 0),
                 EndTime = new DateTime(2026, 1, 4, 10, 0, 0),
-                TotalCalories = 2100
+                TotalCalories = 1200
             };
 
             Exercise exerTwo = new()

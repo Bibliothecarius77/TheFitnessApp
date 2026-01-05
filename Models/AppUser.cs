@@ -17,7 +17,7 @@ namespace TheFitnessApp.Models
 {
     public class AppUser : IdentityUser<Guid>
     {
-        //public override Guid Id { get; set; }
+        //public override Guid UserID { get; set; }
         public DateTime CreationDate { get; set; }
 
         // Navigation properties for one-to-one relationsips
