@@ -1,219 +1,120 @@
-// Gör det möjligt att använda MVC-funktioner som Controller och IActionResult
 using Microsoft.AspNetCore.Mvc;
-
-// Ger tillgång till UnifiedContext (databasen)
 using TheFitnessApp.Data;
 using TheFitnessApp.Models;
 
 namespace TheFitnessApp.Controllers
 {
-    public class ScheduleController : Controller // Controller som ansvarar för träningsscheman (WorkoutSchedule)
+    public class ScheduleController : Controller
     {
-        private readonly UnifiedContext _context;  // Databaskontext (ersätts senare av Repository)
+        private readonly IRepository<WorkoutSchedule> _scheduleRepo;
+        private readonly IRepository<WorkoutSession> _sessionRepo;
 
-        public ScheduleController(UnifiedContext context) // Konstruktor som använder Dependency Injection. // UnifiedContext skickas in automatiskt av ASP.NET Core
+        public ScheduleController(
+            IRepository<WorkoutSchedule> scheduleRepo,
+            IRepository<WorkoutSession> sessionRepo)
         {
-            _context = context;  // Sparar kontexten så den kan användas i hela controllern, t.ex. för att läsa och skriva till databasen.
+            _scheduleRepo = scheduleRepo;
+            _sessionRepo = sessionRepo;
         }
-/*
-        // GET: /Schedule
-        // Hämtar alla träningsscheman från databasen
-        public IActionResult Index()
-        {
-            // Tillfällig testdata (utan databas)
-            var schedules = new List<WorkoutSchedule>
-            {
-                new WorkoutSchedule
-                {
-                    //ScheduleID = 1,
-                    ScheduleID = Guid.NewGuid(),
-                    StartDate = DateTime.Today.AddDays(-14),
-                    EndDate = DateTime.Today.AddDays(-7),
-                    Notes = "Test schedule – Week 1"
-                },
-                new WorkoutSchedule
-                {
-                    //ScheduleID = 2,
-                    ScheduleID = Guid.NewGuid(),
-                    StartDate = DateTime.Today.AddDays(14),
-                    EndDate = DateTime.Today.AddDays(7),
-                    Notes = "Test schedule – Week 2"
-                }
-            };
 
+        // GET: /Schedule
+        // Visa alla scheman
+        public async Task<IActionResult> Index()
+        {
+            var schedules = await _scheduleRepo.GetAsync();
             return View(schedules);
         }
 
-        // public WorkoutSchedule TestSchedule(int id)
-        // {   // Empty history and upcoming schedule
-        //     // TEMP sample data (replace with DB later)
-        //     var schedule = new WorkoutSchedule
-        //     {
-        //         ScheduleID = id,
-        //         UserID = 1,
-        //         StartDate = DateTime.Today.AddDays(-14),
-        //         EndDate = DateTime.Today.AddDays(7), // If its -7 create schedule view
-        //         Notes = "Weekly fitness plan"
-        //     };
-        //     return schedule;
-        // }
-        // Upcoming and history data view
-        //private static WorkoutSchedule TestSchedule(int id)
-        private static WorkoutSchedule TestSchedule(Guid id)
-        {
-            var schedule = new WorkoutSchedule
-            {
-                ScheduleID = id,
-                StartDate = DateTime.Today.AddDays(-14),
-                EndDate = DateTime.Today.AddDays(-7),
-                Notes = "Test schedule"
-            };
-
-            schedule.Sessions.AddRange(new[]
-            {
-                new WorkoutSession
-                {
-                    //SessionID = 1,
-                    SessionID = Guid.NewGuid(),
-                    ScheduleID = id,
-                    StartTime = DateTime.Now.AddDays(-2),
-                    EndTime = DateTime.Now.AddDays(-2).AddHours(1),
-                    TotalCalories = 300
-                },
-                new WorkoutSession
-                {
-                    //SessionID = 2,
-                    SessionID = Guid.NewGuid(),
-                    StartTime = DateTime.Now.AddDays(-4),
-                    EndTime = DateTime.Now.AddDays(-4).AddHours(1),
-                    TotalCalories = 200
-                },
-                new WorkoutSession
-                {
-                    //SessionID = 3,
-                    SessionID = Guid.NewGuid(),
-                    StartTime = DateTime.Now.AddDays(1),
-                    EndTime = DateTime.Now.AddDays(1).AddHours(1),
-                    TotalCalories = 450
-                },
-                new WorkoutSession
-                {
-                    //SessionID = 4,
-                    SessionID = Guid.NewGuid(),
-                    StartTime = DateTime.Now.AddDays(3),
-                    EndTime = DateTime.Now.AddDays(3).AddHours(1),
-                    TotalCalories = 500
-                }
-            });
-            return schedule;
-        }
-
-        // READ – visa detaljer för ett schema
         // GET: /Schedule/Details/{id}
-        //Tillfällig lösning för att visa detaljer för ett träningsschema baserat på ID
-        //public IActionResult Details(int id)
-        public IActionResult Details(Guid id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            var schedule = TestSchedule(id);
-            return View(schedule);
-        }
+            var schedule = await _scheduleRepo.GetByIDAsync(id);
+            if (schedule == null) return NotFound();
 
-        //public IActionResult Upcoming(int id)
-        public IActionResult Upcoming(Guid id)
-        {
-            var schedule = TestSchedule(id);
-            return View(schedule);
-        }
+            var sessions = (await _sessionRepo.GetAsync())
+                           .Where(s => s.ScheduleID == id)
+                           .ToList();
+            schedule.Sessions = sessions;
 
-        //public IActionResult History(int id)
-        public IActionResult History(Guid id)
-        {
-            var schedule = TestSchedule(id);
             return View(schedule);
         }
 
         // GET: /Schedule/Create
-
         public IActionResult Create()
         {
-            // Visar formulär för att skapa ett nytt schema
             return View();
         }
 
-        
-        // CREATE – spara nytt schema
         // POST: /Schedule/Create
         [HttpPost]
-        public IActionResult Create(WorkoutSchedule workoutSchedule)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(WorkoutSchedule schedule)
         {
-            // TODO: Skapa nytt träningsschema via Repository
-
-            // Efter skapande skickas användaren tillbaka till Index
-
-            return RedirectToAction(nameof(Index));
-        }
-
-
-        // UPDATE – visa formulär för redigering
-        // GET: /Schedule/Edit/{id}
-        // tillfällig lösning för att visa redigeringsformulär för ett träningsschema baserat på ID
-        //public IActionResult Edit(int id)
-        public IActionResult Edit(Guid id)
-        {
-            var schedule = new WorkoutSchedule
+            if (ModelState.IsValid)
             {
-                ScheduleID = id,
-                StartDate = DateTime.Today,
-                EndDate = DateTime.Today.AddDays(7),
-                Notes = "Editable test schedule"
-            };
-
+                schedule.ScheduleID = Guid.NewGuid();
+                await _scheduleRepo.InsertAsync(schedule);
+                return RedirectToAction(nameof(Index));
+            }
             return View(schedule);
         }
 
+        // GET: /Schedule/Edit/{id}
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var schedule = await _scheduleRepo.GetByIDAsync(id);
+            if (schedule == null) return NotFound();
+            return View(schedule);
+        }
 
-        // UPDATE – spara ändringar
         // POST: /Schedule/Edit/{id}
         [HttpPost]
-        //public IActionResult Edit(int id, WorkoutSchedule workoutSchedule)
-        public IActionResult Edit(Guid id, WorkoutSchedule workoutSchedule)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, WorkoutSchedule schedule)
         {
-            // TODO: Uppdatera träningsschema via Repository
+            if (id != schedule.ScheduleID) return BadRequest();
 
-            return RedirectToAction(nameof(Index));
-        }
-
-
-        // DELETE – visa bekräftelse
-        // GET: /Schedule/Delete/{id}
-        // tillfällig lösning för att visa bekräftelsesidan för att ta bort ett träningsschema baserat på ID
-
-        //public IActionResult Delete(int id)
-        public IActionResult Delete(Guid id)
-        {
-            var schedule = new WorkoutSchedule
+            if (ModelState.IsValid)
             {
-                ScheduleID = id,
-                StartDate = DateTime.Today,
-                EndDate = DateTime.Today.AddDays(7),
-                Notes = "Schedule to be deleted"
-            };
-
+                await _scheduleRepo.UpdateAsync(schedule);
+                return RedirectToAction(nameof(Index));
+            }
             return View(schedule);
         }
 
-
-        // DELETE – ta bort schema
-        // POST: /Schedule/DeleteConfirmed/{id}
-
-        [HttpPost]
-        //public IActionResult DeleteConfirmed(int id)
-        public IActionResult DeleteConfirmed(Guid id)
+        // GET: /Schedule/Delete/{id}
+        public async Task<IActionResult> Delete(Guid id)
         {
-            // TODO: Ta bort träningsschema via Repository
+            var schedule = await _scheduleRepo.GetByIDAsync(id);
+            if (schedule == null) return NotFound();
+            return View(schedule);
+        }
 
+        // POST: /Schedule/DeleteConfirmed/{id}
+        [HttpPost, ActionName("DeleteConfirmed")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        {
+            await _scheduleRepo.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
-*/
+
+        // GET: /Schedule/Upcoming/{id}
+        public async Task<IActionResult> Upcoming(Guid id)
+        {
+            var sessions = (await _sessionRepo.GetAsync())
+                           .Where(s => s.ScheduleID == id && s.StartTime >= DateTime.Now)
+                           .ToList();
+            return View(sessions);
+        }
+
+        // GET: /Schedule/History/{id}
+        public async Task<IActionResult> History(Guid id)
+        {
+            var sessions = (await _sessionRepo.GetAsync())
+                           .Where(s => s.ScheduleID == id && s.StartTime < DateTime.Now)
+                           .ToList();
+            return View(sessions);
+        }
     }
 }

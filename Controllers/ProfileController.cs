@@ -7,60 +7,73 @@ namespace TheFitnessApp.Controllers
     // Controller för användarens profil
     public class ProfileController : Controller
     {
-        private readonly UnifiedContext _context;
+        private readonly IRepository<UserProfile> _profileRepo;
+        private readonly IRepository<WorkoutGoal> _goalRepo;
+        private readonly IRepository<Statistics> _statsRepo;
 
         // Konstruktor med Dependency Injection
-        public ProfileController(UnifiedContext context)
+        public ProfileController(
+            IRepository<UserProfile> profileRepo,
+            IRepository<WorkoutGoal> goalRepo,
+            IRepository<Statistics> statsRepo)
         {
-            _context = context;
+            _profileRepo = profileRepo;
+            _goalRepo = goalRepo;
+            _statsRepo = statsRepo;
         }
-/*
+
         // GET: /Profile
         // Visar användarens profil
-        public IActionResult Index()
+        public async Task<IActionResult> Index(Guid id)
         {
-            var profile = new UserProfile
+            var profile = await _profileRepo.GetByIDAsync(id);
+            if (profile == null) return NotFound();
+            return View(profile);
+        }
+
+        // GET: /Profile/Edit/{id}
+        // Visa formulär för att redigera profil
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var profile = await _profileRepo.GetByIDAsync(id);
+            if (profile == null) return NotFound();
+            return View(profile);
+        }
+
+        // POST: /Profile/Edit/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, UserProfile profile)
+        {
+            if (id != profile.ProfileID) return BadRequest();
+
+            if (ModelState.IsValid)
             {
-                FirstName = "Test",
-                LastName = "User",
-                AddrCity = "Stockholm",
-                AddrCountry = "Sweden",
-                DateOfBirth = new DateTime(1995, 1, 1),
-                HeightCM = 170,
-                WeightKG = 65
-            };
+                await _profileRepo.UpdateAsync(profile);
+                return RedirectToAction(nameof(Index), new { id = profile.ProfileID });
+            }
 
             return View(profile);
         }
 
-        // GET: /Profile/Goals
+        // GET: /Profile/Goals/{id}
         // Visar användarens träningsmål
-        public IActionResult Goals()
+        public async Task<IActionResult> Goals(Guid userId)
         {
-            // Tillfälliga testmål tills Repository är klart
-            var goals = new List<WorkoutGoal>
-            {
-                new WorkoutGoal
-                {
-                    //GoalID = 1,
-                    GoalID = Guid.NewGuid(),
-                    Type = GoalType.WeightLoss,
-                    TargetValue = 10,
-                    TargetDate = DateTime.Now.AddMonths(1),
-                    IsCompleted = false
-                }
-            };
+            var allGoals = await _goalRepo.GetAsync();
+            var userGoals = allGoals.Where(g => g.UserID == userId).ToList();
 
-            return View(goals);
+            return View(userGoals);
         }
 
-        // GET: /Profile/Statistics
-        // Visar användarens träningsstatistik
-        public IActionResult Statistics()
+        // GET: /Profile/Statistics/{id}
+        // Visar användarens statistik
+        public async Task<IActionResult> Statistics(Guid userId)
         {
-            // TODO: Hämta användarens statistik via Repository
-            return View();
+            var allStats = await _statsRepo.GetAsync();
+            var userStats = allStats.Where(s => s.UserID == userId).ToList();
+
+            return View(userStats);
         }
-*/
     }
 }

@@ -1,58 +1,78 @@
 ﻿@model TheFitnessApp.Models.WorkoutSession
 
 @{
-  Layout = "_FullscreenModalLayout";
-  ViewData["Title"] = "Create Workout Session";
+    Layout = "_FullscreenModalLayout";
+    ViewData["Title"] = "Create Workout Session";
+
+    // Säkerställ att ViewBag.ScheduleStart/End inte är null
+    var scheduleStart = ViewBag.ScheduleStart as DateTime? ?? DateTime.Now;
+    var scheduleEnd = ViewBag.ScheduleEnd as DateTime? ?? DateTime.Now.AddHours(2); // fallback 2h framåt
+
+    // Format för datetime-local input
+    var minDate = scheduleStart.ToString("yyyy-MM-ddTHH:mm");
+    var maxDate = scheduleEnd.ToString("yyyy-MM-ddTHH:mm");
 }
-@{
-  //Note: Add this to the controller later
-  //ViewBag.ScheduleStart = schedule.StartDate;
-  //ViewBag.ScheduleEnd = schedule.EndDate;
-  ViewBag.ScheduleStart = DateTime.Now.Date;
-  ViewBag.ScheduleEnd = DateTime.Now.Date.AddMonths(1);
-    
-  var minDate = ((DateTime)ViewBag.ScheduleStart)
-    .ToString("yyyy-MM-ddTHH:mm");
-  var maxDate = ((DateTime)ViewBag.ScheduleEnd)
-    .ToString("yyyy-MM-ddTHH:mm");
-}
-            
+
+<!-- Titel -->
 <div class="text-center text-white rounded-3 mb-4 p-3"
-  style="background: linear-gradient(135deg,#7b61ff,#157432);">
-  <h3>Create Workout Session</h4>
+     style="background: linear-gradient(135deg,#7b61ff,#157432);">
+    <h3>Create Workout Session</h3>
 </div>
 
+<!-- Formulär -->
 <form asp-action="Create" method="post">
-  <input type="hidden" asp-for="SessionID" />
-  <input type="hidden" asp-for="ScheduleID" />
 
-  <div class="mb-3">
-    <label asp-for="StartTime" class="form-label"></label>
-    <input asp-for="StartTime" type="datetime-local" 
-      class="form-control" min="@minDate" max="@maxDate" />
-  </div>
+    <!-- Skickar med vilket schema passet tillhör -->
+    <input type="hidden" asp-for="ScheduleID" />
 
-  <div class="mb-3">
-    <label asp-for="EndTime" class="form-label"></label>
-    <input asp-for="EndTime" type="datetime-local" 
-      class="form-control" min="@minDate" max="@maxDate" /> 
-  </div>
-                
-  <div class="mb-3">
-    <label asp-for="TotalCalories" class="form-label"></label>
-    <input asp-for="TotalCalories" type="number" 
-      class="form-control" />
-  </div>
+    <!-- Starttid -->
+    <div class="mb-3">
+        <label asp-for="StartTime" class="form-label"></label>
+        <input asp-for="StartTime"
+               type="datetime-local"
+               class="form-control"
+               min="@minDate"
+               max="@maxDate" />
+        <span asp-validation-for="StartTime" class="text-danger"></span>
+    </div>
 
-  <div class="d-flex justify-content-between mt-4">
-    <button class="btn btn-success px-4 rounded-pill" type="submit">
-      Add Session
-    </button>
+    <!-- Sluttid -->
+    <div class="mb-3">
+        <label asp-for="EndTime" class="form-label"></label>
+        <input asp-for="EndTime"
+               type="datetime-local"
+               class="form-control"
+               min="@minDate"
+               max="@maxDate" />
+        <span asp-validation-for="EndTime" class="text-danger"></span>
+    </div>
 
-    <a asp-controller="Workout" asp-action="Index"
-      asp-route-id="@Model.ScheduleID"
-      class="btn btn-secondary px-4 rounded-pill">
-      Cancel
-    </a>
-  </div>
+    <!-- Totala kalorier -->
+    <div class="mb-3">
+        <label asp-for="TotalCalories" class="form-label"></label>
+        <input asp-for="TotalCalories"
+               type="number"
+               class="form-control" />
+        <span asp-validation-for="TotalCalories" class="text-danger"></span>
+    </div>
+
+    <!-- Knappar -->
+    <div class="d-flex justify-content-between mt-4">
+        <button type="submit"
+                class="btn btn-success px-4 rounded-pill">
+            Add Session
+        </button>
+
+        <!-- Tillbaka till schemat -->
+        <a asp-controller="Schedule"
+           asp-action="Details"
+           asp-route-id="@Model.ScheduleID"
+           class="btn btn-secondary px-4 rounded-pill">
+            Cancel
+        </a>
+    </div>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -16,7 +16,7 @@ namespace TheFitnessApp.Models
     public class WorkoutSession
     {
         public Guid SessionID { get; set; }
-        public required WorkoutSchedule Schedule { get; set; }
+        public required WorkoutSchedule Schedule { get; set; } 
         public Guid ScheduleID { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }

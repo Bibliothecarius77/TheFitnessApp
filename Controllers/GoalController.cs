@@ -7,126 +7,92 @@ namespace TheFitnessApp.Controllers
     // Controller för träningsmål (WorkoutGoal)
     public class GoalController : Controller
     {
-        // // Databaskontext (ersätts senare av Repository)
-        private readonly UnifiedContext _context;
+        private readonly IRepository<WorkoutGoal> _repo;
 
         // Konstruktor med Dependency Injection
-        // ASP.NET Core skickar in UnifiedContext automatiskt
-        public GoalController(UnifiedContext context)
+        public GoalController(IRepository<WorkoutGoal> repo)
         {
-            _context = context;
+            _repo = repo;
         }
-/*
+
         // READ – visa alla träningsmål
         // GET: /Goal
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            // TODO: Hämta data via Repository när det är implementerat
-
-            // Just nu visas endast vyn (skelett)
-            return View();
+            var goals = await _repo.GetAsync();
+            return View(goals);
         }
-
 
         // READ – visa detaljer för ett mål
         // GET: /Goal/Details/{id}
-        //public IActionResult Details(int id)
-        public IActionResult Details(Guid id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            // TEMPORÄRT testobjekt tills Repository är klart
-            var goal = new WorkoutGoal
-            {
-                GoalID = id,
-                //UserID = 1,
-                UserID = Guid.NewGuid(),
-                Type = GoalType.WeightLoss,
-                TargetValue = 10,
-                TargetDate = DateTime.Now.AddMonths(1),
-                IsCompleted = false
-            };
-
+            var goal = await _repo.GetByIDAsync(id);
+            if (goal == null) return NotFound();
             return View(goal);
         }
 
-
-
         // CREATE – visa formulär
         // GET: /Goal/Create
-        public IActionResult Create()
-        {
-            // Visar formulär för att skapa ett nytt träningsmål
-            return View();
-        }
+        public IActionResult Create() => View();
 
         // CREATE – spara nytt mål
         // POST: /Goal/Create
         [HttpPost]
-        public IActionResult Create(WorkoutGoal workoutGoal)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(WorkoutGoal workoutGoal)
         {
-            // TODO: Skapa nytt träningsmål via Repository
-
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                await _repo.InsertAsync(workoutGoal);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(workoutGoal);
         }
-
 
         // UPDATE – visa formulär för redigering
         // GET: /Goal/Edit/{id}
-        //public IActionResult Edit(int id)
-        public IActionResult Edit(Guid id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            // TEMPORÄRT testobjekt
-            var goal = new WorkoutGoal
-            {
-                GoalID = id,
-                Type = GoalType.WeightLoss,
-                TargetValue = 10,
-                TargetDate = DateTime.Now.AddMonths(1),
-                IsCompleted = false
-            };
-
+            var goal = await _repo.GetByIDAsync(id);
+            if (goal == null) return NotFound();
             return View(goal);
         }
 
         // UPDATE – spara ändringar
         // POST: /Goal/Edit/{id}
         [HttpPost]
-        //public IActionResult Edit(int id, WorkoutGoal workoutGoal)
-        public IActionResult Edit(Guid id, WorkoutGoal workoutGoal)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, WorkoutGoal workoutGoal)
         {
-            // TODO: Uppdatera träningsmål via Repository
+            if (id != workoutGoal.GoalID) return BadRequest();
 
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                await _repo.UpdateAsync(workoutGoal);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(workoutGoal);
         }
-
 
         // DELETE – visa bekräftelse
         // GET: /Goal/Delete/{id}
-        //public IActionResult Delete(int id)
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            // TEMPORÄRT testobjekt
-            var goal = new WorkoutGoal
-            {
-                GoalID = id,
-                Type = GoalType.WeightLoss,
-                TargetValue = 10,
-                TargetDate = DateTime.Now.AddMonths(1),
-                IsCompleted = false
-            };
-
+            var goal = await _repo.GetByIDAsync(id);
+            if (goal == null) return NotFound();
             return View(goal);
         }
 
-
         // DELETE – ta bort mål
         // POST: /Goal/DeleteConfirmed/{id}
-        [HttpPost]
-        public IActionResult DeleteConfirmed(int id)
+        [HttpPost, ActionName("DeleteConfirmed")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            // TODO: Ta bort träningsmål via Repository
-
+            await _repo.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
-*/
     }
 }
