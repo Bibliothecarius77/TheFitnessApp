@@ -223,6 +223,18 @@ namespace TheFitnessApp.Data
                 CaloriesBurnt = 2100
             };
 
+            // Are all these unnecessary? Maybe already handled by EF Core? #shrug
+            user.Profile = profile;
+            user.Schedule = schedule;
+            user.Goals.Add(goal);
+            user.Statistics.Add(stats);
+            schedule.Sessions.Add(sessionOne);
+            schedule.Sessions.Add(sessionTwo);
+            schedule.Sessions.Add(sessionThree);
+            sessionOne.Exercises.Add(exerOne);
+            sessionTwo.Exercises.Add(exerTwo);
+            sessionThree.Exercises.Add(exerThree);
+
             await context.Set<UserProfile>().AddAsync(profile, cnToken);
             await context.Set<WorkoutGoal>().AddAsync(goal, cnToken);
             await context.Set<Statistics>().AddAsync(stats, cnToken);
