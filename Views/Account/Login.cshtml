@@ -1,0 +1,31 @@
+@{
+    ViewData["Title"] = "ZenMove";
+}
+
+<div class="d-flex justify-content-center align-items-center" style="height:100vh;">
+    <div class="zenmove-card text-center p-4">
+        
+        <!-- ZenMove logo -->
+        <div class="text-center mb-4">
+            <img src="/images/Zenmove-logo.jpg" alt="ZenMove logo" class="zenmove-logo img-fluid" />
+        </div>
+
+        <!-- Login -->
+        <form asp-controller="Account" asp-action="Login" method="post" class="mb-4">
+            <input type="email" name="Email" class="form-control mb-2" placeholder="Email" required>
+            <input type="password" name="Password" class="form-control mb-3" placeholder="Password" required>
+            <button type="submit" class="btn btn-primary w-100">Log in</button>
+        </form>
+
+        <hr class="my-3">
+
+        <!-- Registration -->
+        <form asp-controller="Account" asp-action="Register" method="post">
+            <input type="text" name="FirstName" class="form-control mb-2" placeholder="First name" required>
+            <input type="text" name="LastName" class="form-control mb-2" placeholder="Last name" required>
+            <input type="email" name="Email" class="form-control mb-2" placeholder="Email" required>
+            <input type="password" name="Password" class="form-control mb-3" placeholder="Password" required>
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+        </form>
+    </div>
+</div>

@@ -1,34 +1,103 @@
 ﻿@model IEnumerable<TheFitnessApp.Models.Exercise>
-@* Kopplar vyn till en lista av Exercise *@
 
 @{
     ViewData["Title"] = "Exercises";
 }
 
-<div class="container mt-5">
+@if (Model == null || !Model.Any())
+{
+    <div class="top-0 start-0 w-100 h-100
+        d-flex align-items-center justify-content-center">
 
-    <h1>Exercises</h1>
+        <div class="card shadow-lg rounded-4 p-4 fw-medium text-center" 
+            style="width:400px;">
+            <h4 class="alert alert-warning rounded-4 mb-3">
+                No Active Workout Exercise
+            </h4>
 
-    <p>
-        <a asp-action="Create" class="btn btn-primary">
-            Create new exercise
-        </a>
-    </p>
+            <p>You don't have a workout Exercise yet.</p>
 
-    <!-- Enkel tabell (skelett) -->
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
+            <a asp-action="Create" asp-controller="Exercise"
+               class="btn btn-primary px-4 rounded-pill mt-3">
+                + Create Exercise
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="top-0 start-0 w-100 h-100
+        d-flex align-items-center justify-content-center">
 
-            @* Data kommer kopplas in senare *@
+        <div class="card shadow rounded-4 p-4 fw-medium" 
+            style="width:600px;">
 
-        </tbody>
-    </table>
+            <div class="col">
+                <!-- Title & Logo -->
+                <div class="d-flex">
+                    <div class="me-5 header-glass">
+                        <h4 class="fw-medium">MY Workout</h4>
+                        <h1 class="fw-bold text-muted">Exercise List</h1>
+                    </div>
+                    <img src="/images/Zenmove-logo.jpg" 
+                        class="rounded-4 mb-2"
+                        style="max-width: 120px; margin-left: 7rem;" />
+                </div>
 
-</div>
+                <table class="table table-hover mt-3 table-sm">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Category</th>
+                            <th>Calories</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="align-middle text-muted fw-medium">
+                                <td>@item.ExerciseID</td>
+                                <td>@item.Type</td>
+                                <td>@item.Category</td>
+                                <td>@item.CaloriesBurnt</td>
+                                <td>
+                                    <div class="d-flex gap-1 mt-1 justify-content-center">    
+                                        <a asp-action="Edit" asp-route-id="@item.ExerciseID"
+                                            class="btn btn-sm btn-warning">
+                                            Edit
+                                        </a>
+            
+                                        <a asp-action="Delete" asp-route-id="@item.ExerciseID"
+                                            class="btn btn-sm btn-danger">
+                                            Delete
+                                        </a>
+            
+                                        <a asp-action="Details" asp-route-id="@item.ExerciseID"
+                                            class="btn btn-sm btn-primary">
+                                            Details
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-between mt-3">
+                <a asp-action="Index" asp-controller="Profile"
+                    class="btn btn-secondary px-4 rounded-pill">
+                    Back to Profile
+                </a>
+
+                <a asp-action="Create" asp-controller="Exercise"
+                    class="btn btn-success px-4 rounded-pill">
+                    + Create New
+                </a>
+            </div>  
+        </div>
+    </div>
+}
