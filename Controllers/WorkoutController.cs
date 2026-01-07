@@ -48,10 +48,11 @@ namespace TheFitnessApp.Controllers
 
             var session = new WorkoutSession
             {
-                SessionID = Guid.NewGuid(),
+                // Primary Keys are automatically handled by the database
+                //SessionID = Guid.NewGuid(),
                 ScheduleID = scheduleId.Value,
-                Schedule = schedule, //  Required property måste sättas
-                StartTime = schedule.StartDate,
+                Schedule = schedule!, //  Required property måste sättas
+                StartTime = schedule!.StartDate,
                 EndTime = schedule.StartDate.AddHours(1) // default 1 timme
             };
 
@@ -65,7 +66,8 @@ namespace TheFitnessApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                workoutSession.SessionID = Guid.NewGuid();
+                // Primary Keys are automatically handled by the database
+                //workoutSession.SessionID = Guid.NewGuid();
                 await _workoutRepo.InsertAsync(workoutSession);
                 return RedirectToAction("Details", "Schedule", new { id = workoutSession.ScheduleID });
             }

@@ -15,22 +15,39 @@ namespace TheFitnessApp.Models
 {
     public class WorkoutSession
     {
-        public Guid SessionID { get; set; }
-        public required WorkoutSchedule Schedule { get; set; } 
-        public Guid ScheduleID { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public Guid SessionID { get; set; }                     // Primary Key
+        //public required WorkoutSchedule Schedule { get; set; }
+        public required WorkoutSchedule Schedule
+        {
+            get
+            {
+                return Schedule;
+            }
+
+            set
+            {
+                ScheduleID = value.ScheduleID;
+            }
+        }
+        public Guid ScheduleID { get; set; }                    // Foreign Key
+        public required DateTime StartTime { get; set; }
+        public required DateTime EndTime { get; set; }
         public int TotalCalories { get; set; }
 
-        // Navigation properties for one-to-many relationsips
-        //public ICollection<Exercise> Exercises { get; set; } = new List<Exercise>();
+        // Navigation property for one-to-many relationsip
         public List<Exercise> Exercises { get; set; } = new List<Exercise>();
 
         public WorkoutSession()
         {
-            // Add content here
         }
 
-        // Add methods here
+        public void UpdateTimes(DateTime start, DateTime end)
+        {
+            if (end <= start)
+                throw new InvalidOperationException("End time must be after start time.");
+
+            StartTime = start;
+            EndTime = end;
+        }
     }
 }

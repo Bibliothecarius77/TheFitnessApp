@@ -59,6 +59,9 @@ namespace TheFitnessApp
                 .AddRoles<IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<UnifiedContext>();
 
+            // Register services
+            builder.Services.AddScoped<IUserAggregateService, UserAggregateService>();
+
             // Endast MVC-controllers och views (ingen Identity UI, ingen scaffoldad CSS)
             builder.Services.AddControllersWithViews();
 

@@ -15,9 +15,9 @@ namespace TheFitnessApp.Models
 {
     public class Statistics
     {
-        public Guid StatsID { get; set; }
+        public Guid StatsID { get; set; }                  // Primary Key
         public required AppUser User { get; set; }
-        public required Guid UserID { get; set; }          // EF Core - DB Foreign Key
+        public required Guid UserID { get; set; }          // Foreign Key
         public DateTime PeriodStart { get; set; }
         public DateTime PeriodEnd { get; set; }
         public int TotalWorkouts { get; set; }

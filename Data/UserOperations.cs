@@ -11,6 +11,7 @@
  *   Victoria Rådberg
  */
 
+using Bogus;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -249,6 +250,139 @@ namespace TheFitnessApp.Data
             await context.SaveChangesAsync(cnToken);
         }
 
+        public static async Task SeedFitnessDataNew(AppUser user, UnifiedContext context, CancellationToken cnToken)
+        {
+            Faker<UserProfile> fProfile = new();
+
+            UserProfile profile = new()
+            {
+                User = user,
+                UserID = user.Id,
+                FirstName = "Jane",
+                LastName = "Doe",
+                AddrStreet = "Main Street",
+                AddrNumber = 1,
+                AddrZip = "90510",
+                AddrCity = "Beverly Hills",
+                AddrCountry = "USA",
+                DateOfBirth = new DateTime(1999, 2, 14),
+                HeightCM = 169,
+                WeightKG = 62f
+            };
+
+            WorkoutGoal goal = new()
+            {
+                User = user,
+                UserID = user.Id,
+                Type = GoalType.WeightLoss,
+                TargetValue = 20,
+                TargetDate = new DateTime(2026, 2, 14),
+                IsCompleted = false
+            };
+
+            WorkoutSchedule schedule = new()
+            {
+                User = user,
+                UserID = user.Id,
+                StartDate = new DateTime(2026, 1, 1),
+                EndDate = new DateTime(2026, 4, 30),
+                Notes = "Let's get in shape!"
+            };
+
+            WorkoutSession sessionOne = new()
+            {
+                Schedule = schedule,
+                ScheduleID = schedule.ScheduleID,
+                StartTime = new DateTime(2026, 1, 2, 9, 0, 0),
+                EndTime = new DateTime(2026, 1, 2, 9, 45, 0),
+                TotalCalories = 2100
+            };
+
+            Exercise exerOne = new()
+            {
+                Session = sessionOne,
+                SessionID = sessionOne.SessionID,
+                Type = ExerciseType.Cardio,
+                Category = "Spinning",
+                CaloriesBurnt = 2100
+            };
+
+            WorkoutSession sessionTwo = new()
+            {
+                Schedule = schedule,
+                ScheduleID = schedule.ScheduleID,
+                StartTime = new DateTime(2026, 1, 4, 9, 0, 0),
+                EndTime = new DateTime(2026, 1, 4, 10, 0, 0),
+                TotalCalories = 1200
+            };
+
+            Exercise exerTwo = new()
+            {
+                Session = sessionTwo,
+                SessionID = sessionTwo.SessionID,
+                Type = ExerciseType.Strength,
+                Category = "Torso",
+                Sets = 10,
+                Reps = 15,
+                WeightKG = 45,
+                CaloriesBurnt = 1200
+            };
+
+            WorkoutSession sessionThree = new()
+            {
+                Schedule = schedule,
+                ScheduleID = schedule.ScheduleID,
+                StartTime = new DateTime(2026, 1, 5, 15, 30, 0),
+                EndTime = new DateTime(2026, 1, 5, 16, 15, 0),
+                TotalCalories = 2100
+            };
+
+            Exercise exerThree = new()
+            {
+                Session = sessionThree,
+                SessionID = sessionThree.SessionID,
+                Type = ExerciseType.Cardio,
+                Category = "Spinning",
+                CaloriesBurnt = 2100
+            };
+
+            Statistics stats = new()
+            {
+                User = user,
+                UserID = user.Id,
+                PeriodStart = new DateTime(2026, 1, 1),
+                PeriodEnd = new DateTime(2026, 1, 5),
+                TotalWorkouts = 3,
+                TotalDurationMin = 150,
+                TotalCaloriesBurnt = 5400
+            };
+
+            // Are all these unnecessary? Maybe already handled by EF Core? #shrug
+            user.Profile = profile;
+            user.Schedule = schedule;
+            user.Goals.Add(goal);
+            user.Statistics.Add(stats);
+            schedule.Sessions.Add(sessionOne);
+            schedule.Sessions.Add(sessionTwo);
+            schedule.Sessions.Add(sessionThree);
+            sessionOne.Exercises.Add(exerOne);
+            sessionTwo.Exercises.Add(exerTwo);
+            sessionThree.Exercises.Add(exerThree);
+
+            await context.Set<UserProfile>().AddAsync(profile, cnToken);
+            await context.Set<WorkoutGoal>().AddAsync(goal, cnToken);
+            await context.Set<Statistics>().AddAsync(stats, cnToken);
+            await context.Set<WorkoutSchedule>().AddAsync(schedule, cnToken);
+            await context.Set<WorkoutSession>().AddAsync(sessionOne, cnToken);
+            await context.Set<WorkoutSession>().AddAsync(sessionTwo, cnToken);
+            await context.Set<WorkoutSession>().AddAsync(sessionThree, cnToken);
+            await context.Set<Exercise>().AddAsync(exerOne, cnToken);
+            await context.Set<Exercise>().AddAsync(exerTwo, cnToken);
+            await context.Set<Exercise>().AddAsync(exerThree, cnToken);
+
+            await context.SaveChangesAsync(cnToken);
+        }
+
         public static async Task<bool> VerifyUserAsync(UserManager<AppUser> userManager, RoleManager<IdentityRole<Guid>> roleManager, AppUser user)
         {
             if (userManager != null && user != null && !String.IsNullOrEmpty(user.UserName))
@@ -351,6 +485,25 @@ namespace TheFitnessApp.Data
         // Seed test data for regular users
         public static async Task<AppUser[]> GenerateTestUsersAsync()
         {
+            AppUser[] users =
+            [
+               new AppUser
+                {
+                    Email = "guest@gmail.com",
+                    NormalizedEmail = "GUEST@GMAIL.COM",
+                    UserName = "Guest",
+                    NormalizedUserName = "GUEST",
+                    EmailConfirmed = true
+                }
+            ];
+
+            return users;
+        }
+
+        public static async Task<AppUser[]> GenerateTestUsersAsyncNew()
+        {
+            Faker<AppUser> fUser = new();
+
             AppUser[] users =
             [
                new AppUser

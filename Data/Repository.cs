@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TheFitnessApp.Data
 {
-    // 📌 Generic repository interface med Guid som ID
+    // Generic Repository Interface with Guid
     public interface IRepository<T> where T : class
     {
         // CREATE
@@ -37,7 +37,7 @@ namespace TheFitnessApp.Data
         Task DeleteAsync(Guid id);
     }
 
-    // 📌 Generic repository implementation
+    // Generic Repository implementation
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly UnifiedContext _context;

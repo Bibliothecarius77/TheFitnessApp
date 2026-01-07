@@ -15,9 +15,9 @@ namespace TheFitnessApp.Models
 {
     public class WorkoutGoal
     {
-        public Guid GoalID { get; set; }
+        public Guid GoalID { get; set; }                   // Primary Key
         public required AppUser User { get; set; }
-        public required Guid UserID { get; set; }          // EF Core - DB Foreign Key
+        public required Guid UserID { get; set; }          // Foreign Key
         public GoalType Type { get; set; }
         public int TargetValue { get; set; }
         public DateTime TargetDate { get; set; }

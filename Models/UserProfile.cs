@@ -15,9 +15,9 @@ namespace TheFitnessApp.Models
 {
     public class UserProfile
     {
-        public Guid ProfileID { get; set; }
+        public Guid ProfileID { get; set; }                // Primary Key
         public required AppUser User { get; set; }
-        public required Guid UserID { get; set; }          // EF Core - DB Foreign Key
+        public required Guid UserID { get; set; }          // Foreign Key
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
         public string? AddrStreet { get; set; }
@@ -32,12 +32,11 @@ namespace TheFitnessApp.Models
         public UserProfile()
         {
         }
-
+/*
         public void UpdateProfile()
         {
-            // Add content here (?)
         }
-
+*/
         // Maybe add more methods here
     }
 }

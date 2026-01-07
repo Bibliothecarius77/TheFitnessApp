@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TheFitnessApp.Data;
 using TheFitnessApp.Models;
 
 namespace TheFitnessApp.Controllers
 {
+/*
     public class ScheduleController : Controller
     {
         private readonly IRepository<WorkoutSchedule> _scheduleRepo;
@@ -52,7 +55,8 @@ namespace TheFitnessApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                schedule.ScheduleID = Guid.NewGuid();
+                // Primary Keys are automatically handled by the database
+                //schedule.ScheduleID = Guid.NewGuid();
                 await _scheduleRepo.InsertAsync(schedule);
                 return RedirectToAction(nameof(Index));
             }
@@ -115,6 +119,203 @@ namespace TheFitnessApp.Controllers
                            .Where(s => s.ScheduleID == id && s.StartTime < DateTime.Now)
                            .ToList();
             return View(sessions);
+        }
+    }
+*/
+
+    [Authorize]
+    public class ScheduleController : Controller
+    {
+        private readonly UnifiedContext _context;
+        private readonly IUserAggregateService _users;
+        private readonly UserManager<AppUser> _userManager;
+
+        public ScheduleController(UnifiedContext context, IUserAggregateService users, UserManager<AppUser> userManager)
+        {
+            _context = context;
+            _users = users;
+            _userManager = userManager;
+        }
+
+        // GET: /Schedule
+        // Visa användarens enda schema (man kan bara ha ett, men schemat kan sedan ha flers Sessions)
+        public async Task<IActionResult> Index()
+        {
+            //var userId = Guid.Parse(_userManager.GetUserId(User)!);
+            //var user = await _users.GetAsync(userId);
+            var user = await GetCurrentUserAsync();
+
+            if (user?.Schedule == null)
+                return NotFound();
+
+            return View(user.Schedule);
+        }
+
+        // GET: /Schedule/Details
+        public async Task<IActionResult> Details()
+        {
+            var user = await GetCurrentUserAsync();
+
+            if (user?.Schedule == null)
+                return NotFound();
+
+            return View(user.Schedule);
+        }
+
+        // GET: /Schedule/Create
+        public IActionResult Create()
+        {
+            return View(new WorkoutSessionInputModel());
+        }
+
+        // POST: /Schedule/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(WorkoutSession session)
+        {
+            if (!ModelState.IsValid)
+                return View(session);
+
+            var user = await GetCurrentUserAsync();
+
+            if (user?.Schedule == null)
+                return NotFound();
+
+            // Enforce aggregate ownership
+            user.Schedule.Sessions.Add(session);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details));
+        }
+
+        // GET: /Schedule/EditSchedule
+        public async Task<IActionResult> EditSchedule()
+        {
+            var user = await GetCurrentUserAsync();
+
+            if (user?.Schedule == null)
+                return NotFound();
+
+            return View(user.Schedule);
+        }
+
+        // POST: /Schedule/EditSchedule
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditSchedule(WorkoutSchedule updated)
+        {
+            if (!ModelState.IsValid)
+                return View(updated);
+
+            var user = await GetCurrentUserAsync();
+            var schedule = user?.Schedule;
+
+            if (schedule == null)
+                return NotFound();
+
+            // Update non-required properties
+            schedule.StartDate = updated.StartDate;
+            schedule.EndDate = updated.EndDate;
+            schedule.Notes = updated.Notes;
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details));
+        }
+
+        // GET: /Schedule/Edit/{id}
+        public async Task<IActionResult> EditSession(Guid id)
+        {
+            var user = await GetCurrentUserAsync();
+            var session = user?.Schedule?.Sessions.SingleOrDefault(s => s.SessionID == id);
+
+            if (session == null)
+                return NotFound();
+
+            return View(session);
+        }
+
+        // POST: /Schedule/Edit/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditSession(Guid id, WorkoutSession updated)
+        {
+            if (!ModelState.IsValid)
+                return View(updated);
+
+            var user = await GetCurrentUserAsync();
+            var session = user?.Schedule?.Sessions.SingleOrDefault(s => s.SessionID == id);
+
+            if (session == null)
+                return NotFound();
+
+            // Update non-required properties
+            session.StartTime = updated.StartTime;
+            session.EndTime = updated.EndTime;
+            session.TotalCalories = updated.TotalCalories;
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details));
+        }
+
+        // GET: /Schedule/Delete/{id}
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var user = await GetCurrentUserAsync();
+            var session = user?.Schedule?.Sessions.SingleOrDefault(s => s.SessionID == id);
+
+            if (session == null)
+                return NotFound();
+
+            return View(session);
+        }
+
+        // POST: /Schedule/DeleteConfirmed/{id}
+        [HttpPost, ActionName("DeleteConfirmed")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        {
+            var user = await GetCurrentUserAsync();
+            var session = user?.Schedule?.Sessions.SingleOrDefault(s => s.SessionID == id);
+
+            if (session == null)
+                return NotFound();
+
+            user!.Schedule!.Sessions.Remove(session);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details));
+        }
+
+        // GET: /Schedule/Upcoming
+        public async Task<IActionResult> Upcoming()
+        {
+            var user = await GetCurrentUserAsync();
+            var sessions = user?.Schedule?.Sessions
+                .Where(s => s.StartTime >= DateTime.Now)
+                .OrderBy(s => s.StartTime)
+                .ToList();
+
+            return View(sessions);
+        }
+
+        // GET: /Schedule/History
+        public async Task<IActionResult> History()
+        {
+            var user = await GetCurrentUserAsync();
+            var sessions = user?.Schedule?.Sessions
+                .Where(s => s.EndTime < DateTime.Now)
+                .OrderByDescending(s => s.StartTime)
+                .ToList();
+
+            return View(sessions);
+        }
+
+        private async Task<AppUser> GetCurrentUserAsync()
+        {
+            var userId = Guid.Parse(_userManager.GetUserId(User)!);
+
+            return await _users.GetAsync(userId)
+                ?? throw new InvalidOperationException("User not found.");
         }
     }
 }

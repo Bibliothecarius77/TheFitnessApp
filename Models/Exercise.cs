@@ -15,9 +15,9 @@ namespace TheFitnessApp.Models
 {
     public class Exercise
     {
-        public Guid ExerciseID { get; set; }
-        public Guid SessionID { get; set; }
+        public Guid ExerciseID { get; set; }               // Primary Key
         public required WorkoutSession Session { get; set; }
+        public Guid SessionID { get; set; }                // Foreign Key
         public ExerciseType Type { get; set; }
         public string? Category { get; set; }
         public int Sets { get; set; }

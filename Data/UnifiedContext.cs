@@ -20,6 +20,7 @@ namespace TheFitnessApp.Data
 {
     public class UnifiedContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
     {
+        // DbSet<AppUser> is created "behind the scenes" by ASP.NET Core Identity, it must not be added here
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<WorkoutGoal> Goals { get; set; }
         public DbSet<Statistics> Statistics { get; set; }
@@ -39,12 +40,14 @@ namespace TheFitnessApp.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //SeedData(optionsBuilder);
+            // Could seed data here automatically
+            // Now it's called from Program.cs instead
         }
 
+        // Database structure definitions
         private static void ConfigureDomain(ModelBuilder builder)
         {
-            // Fluent API - Map AppUser class to the standard ASP.NET table
+            // Fluent API - Map AppUser class to the standard ASP.NET database table
             builder.Entity<AppUser>().ToTable("AspNetUsers");
 
             // Fluent API - Define primary keys
@@ -67,141 +70,51 @@ namespace TheFitnessApp.Data
                 .HasKey(u => u.ExerciseID);
 
             // Fluent API - Define table relationships
+            //   The custom properties in AppUser are not 'required',
+            //   so that entity needs only the default Identity mappings
             builder.Entity<UserProfile>()
                 .HasOne(p => p.User)
                 .WithOne(u => u.Profile)
                 .HasForeignKey<UserProfile>(p => p.UserID)
-                .OnDelete(DeleteBehavior.Cascade);
+                .IsRequired()
+                //.OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<WorkoutGoal>()
                 .HasOne(g => g.User)
                 .WithMany(u => u.Goals)
-                .HasForeignKey(g => g.UserID);
+                .HasForeignKey(g => g.UserID)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Statistics>()
                 .HasOne(s => s.User)
                 .WithMany(u => u.Statistics)
-                .HasForeignKey(s => s.UserID);
+                .HasForeignKey(s => s.UserID)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<WorkoutSchedule>()
                 .HasOne(s => s.User)
                 .WithOne(u => u.Schedule)
                 .HasForeignKey<WorkoutSchedule>(s => s.UserID)
-                .OnDelete(DeleteBehavior.Cascade);
+                .IsRequired()
+                //.OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<WorkoutSession>()
                 .HasOne(s => s.Schedule)
                 .WithMany(u => u.Sessions)
-                .HasForeignKey(s => s.ScheduleID);
+                .HasForeignKey(s => s.ScheduleID)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Exercise>()
                 .HasOne(s => s.Session)
                 .WithMany(u => u.Exercises)
-                .HasForeignKey(s => s.SessionID);
+                .HasForeignKey(s => s.SessionID)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
         }
-
-/*
-        private void SeedData(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("<ConnectionString>").UseSeeding((context, _) =>
-            {
-                if (!context.Set<AppUser>().Any(x => x.UserName == "Guest"))
-                {
-                    context.Set<AppUser>().Add(new AppUser
-                    {
-                        UserName = "Guest",
-                        NormalizedUserName = "GUEST",
-                        Email = "guest@gmail.com",
-                        NormalizedEmail = "GUEST@GMAIL.COM",
-                        EmailConfirmed = true
-                    });
-                }
-
-                if (!context.Set<UserProfile>().Any(x => x.Name == "Felipe"))
-                {
-                    context.Set<UserProfile>().Add(new UserProfile
-                    {
-                        Name = "Felipe"
-                    });
-                }
- 
-                context.SaveChanges();
-            });
-
-
-
-            Users.AddRange(
-            [
-                new Exercise
-                {
-                    Email = "arsalan_dx@hotmail.com",
-                    NormalizedEmail = "ARSALAN_DX@HOTMAIL.COM",
-                    UserName = "Arsalan",
-                    NormalizedUserName = "ARSALAN",
-                    EmailConfirmed = true
-                },
-                new AppUser
-                {
-                    Email = "jacob.damm@gmail.com",
-                    NormalizedEmail = "JACOB.DAMM@GMAIL.COM",
-                    UserName = "Jacob",
-                    NormalizedUserName = "JACOB",
-                    EmailConfirmed = true
-                },
-                new AppUser
-                {
-                    Email = "liridona.demaj@outlook.com",
-                    NormalizedEmail = "LIRIDONA.DEMAJ@OUTLOOK.COM",
-                    UserName = "Liridona",
-                    NormalizedUserName = "LIRIDONA",
-                    EmailConfirmed = true
-                },
-                new AppUser
-                {
-                    Email = "radbergvictoria@gmail.com",
-                    NormalizedEmail = "RADBERGVICTORIA@GMAIL.COM",
-                    UserName = "Victoria",
-                    NormalizedUserName = "VICTORIA",
-                    EmailConfirmed = true
-                }
-            ]);
-
-            Exercises.AddRange(
-            [
-                new Exercise
-                {
-                    Email = "arsalan_dx@hotmail.com",
-                    NormalizedEmail = "ARSALAN_DX@HOTMAIL.COM",
-                    UserName = "Arsalan",
-                    NormalizedUserName = "ARSALAN",
-                    EmailConfirmed = true
-                },
-                new AppUser
-                {
-                    Email = "jacob.damm@gmail.com",
-                    NormalizedEmail = "JACOB.DAMM@GMAIL.COM",
-                    UserName = "Jacob",
-                    NormalizedUserName = "JACOB",
-                    EmailConfirmed = true
-                },
-                new AppUser
-                {
-                    Email = "liridona.demaj@outlook.com",
-                    NormalizedEmail = "LIRIDONA.DEMAJ@OUTLOOK.COM",
-                    UserName = "Liridona",
-                    NormalizedUserName = "LIRIDONA",
-                    EmailConfirmed = true
-                },
-                new AppUser
-                {
-                    Email = "radbergvictoria@gmail.com",
-                    NormalizedEmail = "RADBERGVICTORIA@GMAIL.COM",
-                    UserName = "Victoria",
-                    NormalizedUserName = "VICTORIA",
-                    EmailConfirmed = true
-                }
-            ]);
-        }
-*/
     }
 }
