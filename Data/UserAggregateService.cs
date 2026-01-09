@@ -1,7 +1,7 @@
 /*
  * ZenMove - The Ultimate Fitness App
  *
- * IT-påbyggnad Utvecklare (Lexicon)
+ * IT-påbyggnad Utvecklare, Fullstack .NET (Lexicon)
  * Kursvecka 13-16 (vv.2551-2602)
  *
  * Grupp Blå:
