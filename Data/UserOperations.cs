@@ -409,12 +409,14 @@ namespace TheFitnessApp.Data
                         {
                             if(await userManager.IsInRoleAsync(existingUser, role.ToString()))
                             {
-                                Console.WriteLine("UserOperations.VerifyUserAsync() --> User \"" + existingUser.UserName + "\" does exist in the role of '" + role.ToString() + "'.");
+                                DebugWriteLine("UserOperations.VerifyUserAsync() --> User \"" + existingUser.UserName
+                                    + "\" does exist in the role of '" + role.ToString() + "'.");
                                 return true;
                             }
                         }
 
-                        Console.WriteLine("UserOperations.VerifyUserAsync() --> User \"" + existingUser.UserName + "\" does exist, but has no registered Identity role.");
+                        DebugWriteLine("UserOperations.VerifyUserAsync() --> User \"" + existingUser.UserName
+                            + "\" does exist, but has no registered Identity role.");
                         return true;
                     }
                     // No registered Identity roles - try this app's "standard roles" instead.
@@ -426,18 +428,21 @@ namespace TheFitnessApp.Data
                         {
                             if (await userManager.IsInRoleAsync(existingUser, roleName))
                             {
-                                Console.WriteLine("UserOperations.VerifyUserAsync() --> User \"" + existingUser.UserName + "\" does exist in the role of '" + roleName + "'.");
+                                DebugWriteLine("UserOperations.VerifyUserAsync() --> User \""
+                                    + existingUser.UserName + "\" does exist in the role of '" + roleName + "'.");
                                 return true;
                             }
                         }
 
-                        Console.WriteLine("UserOperations.VerifyUserAsync() --> User \"" + existingUser.UserName + "\" does exist, but has no registered Identity role.");
+                        DebugWriteLine("UserOperations.VerifyUserAsync() --> User \"" + existingUser.UserName
+                            + "\" does exist, but has no registered Identity role.");
+
                         return true;
                     }
                 }
             }
 
-            Console.WriteLine("UserOperations.VerifyUserAsync() --> User \"" + userName + "\" does NOT exist.");
+            DebugWriteLine("UserOperations.VerifyUserAsync() --> User \"" + userName + "\" does NOT exist.");
             return false;
         }
 
@@ -519,6 +524,21 @@ namespace TheFitnessApp.Data
             ];
 
             return users;
+        }
+
+        public static void DebugWriteLine(string output = "")
+        {
+            DebugWrite(output + "\n");
+        }
+
+        public static void DebugWrite(string output)
+        {
+            if (!Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")!.Equals("Development"))
+                return;
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write(output);
+            Console.ResetColor();
         }
     }
 }
