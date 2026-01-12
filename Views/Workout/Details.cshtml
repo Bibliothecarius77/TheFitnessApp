@@ -1,4 +1,4 @@
-﻿@model TheFitnessApp.Models.WorkoutSession
+@model TheFitnessApp.Models.WorkoutSession
 
 @{
     Layout = "_FullscreenModalLayout";
@@ -36,7 +36,7 @@
                 <div class="card shadow-sm rounded-4 mb-2">
                     <div class="card-body text-center fw-bold text-muted">
                         <div class="mb-1">
-                            Date: @Model.StartTime.ToShortDateString()
+                            Date: @Model!.StartTime.ToShortDateString()
                         </div>
                         <div>
                             Time: @Model.StartTime.ToString("HH:mm") - @Model.EndTime.ToString("HH:mm")

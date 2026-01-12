@@ -27,31 +27,28 @@ namespace TheFitnessApp.Models
     public class WorkoutSession
     {
         public Guid SessionID { get; set; }                     // Primary Key
-        //public required WorkoutSchedule Schedule { get; set; }
-        public WorkoutSchedule Schedule
+        public required WorkoutSchedule Schedule
         {
-            get
-            {
-                return Schedule;
-            }
+            get;
             set
             {
                 // Set Foreign Key from this entity
                 ScheduleID = value.ScheduleID;
+
+                field = value;
             }
         }
         public Guid ScheduleID { get; set; }                    // Foreign Key
         public required DateTime StartTime { get; set; }
         public required DateTime EndTime
         {
-            get
-            {
-                return EndTime;
-            }
+            get;
             set
             {
                 if (value <= StartTime)
                     throw new InvalidOperationException("End time must be after start time.");
+
+                field = value;
             }
         }
         public int TotalCalories { get; set; }
@@ -59,15 +56,13 @@ namespace TheFitnessApp.Models
         // Navigation property for one-to-many relationsip
         public List<Exercise> Exercises { get; set; } = new List<Exercise>();
 
+        // Constructor for EF Core
         public WorkoutSession()
         {
         }
 
         public void UpdateTimes(DateTime start, DateTime end)
         {
-            //if (end <= start)
-            //    throw new InvalidOperationException("End time must be after start time.");
-
             StartTime = start;
             EndTime = end;
         }

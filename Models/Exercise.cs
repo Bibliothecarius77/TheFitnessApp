@@ -12,6 +12,7 @@
  */
 
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TheFitnessApp.Models
 {
@@ -39,16 +40,15 @@ namespace TheFitnessApp.Models
     public class Exercise
     {
         public Guid ExerciseID { get; set; }               // Primary Key
-        public WorkoutSession Session
+        public required WorkoutSession Session
         {
-            get
-            {
-                return Session;
-            }
+            get;
             set
             {
                 // Set Foreign Key from this entity
                 SessionID = value.SessionID;
+
+                field = value;
             }
         }
         public Guid SessionID { get; set; }                // Foreign Key
@@ -65,17 +65,19 @@ namespace TheFitnessApp.Models
         {
         }
 
-        public Exercise(ExerciseType type, string? category, int sets, int reps, int weightKG, int caloriesBurt, float metValue)
-        {
-            Update(type, category, sets, reps, weightKG, caloriesBurt, metValue);
-        }
-
-        //public Exercise(WorkoutSession session, Guid id, ExerciseType type, string? category, int sets, int reps, int weightKG, int caloriesBurt, float metValue)
+        //public Exercise(ExerciseType type, string? category, int sets, int reps, int weightKG, int caloriesBurt, float metValue)
         //{
-        //    Session = session;
-        //    SessionID = id;
         //    Update(type, category, sets, reps, weightKG, caloriesBurt, metValue);
         //}
+
+        [SetsRequiredMembers]
+        public Exercise(WorkoutSession session, ExerciseType type, string? category, int sets, int reps, int weightKG, int caloriesBurt, float metValue)
+        {
+            Session = session;
+            SessionID = session.SessionID;
+
+            Update(type, category, sets, reps, weightKG, caloriesBurt, metValue);
+        }
 
         public void Update(ExerciseType type, string? category, int sets, int reps, int weightKG, int caloriesBurt, float metValue)
         {

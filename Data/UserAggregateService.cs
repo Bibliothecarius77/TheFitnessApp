@@ -37,7 +37,7 @@ namespace TheFitnessApp.Data
                 .Include(u => u.Goals)
                 .Include(u => u.Statistics)
                 .Include(u => u.Schedule)
-                .ThenInclude(s => s.Sessions)
+                .ThenInclude(s => s!.Sessions)
                 .ThenInclude(s => s.Exercises)
                 .SingleOrDefaultAsync(u => u.Id == userId);
         }

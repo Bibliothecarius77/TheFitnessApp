@@ -161,6 +161,7 @@ namespace TheFitnessApp.Controllers
             // Set non-required properties
             //Exercise exercise = new(
             var exercise = new Exercise(
+                session,
                 input.Type,
                 input.Category,
                 input.Sets,

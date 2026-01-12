@@ -252,7 +252,8 @@ namespace TheFitnessApp.Data
 
         public static async Task SeedFitnessDataNew(AppUser user, UnifiedContext context, CancellationToken cnToken)
         {
-            Faker<UserProfile> fProfile = new();
+            // Use Bogus methods for massive seeding (work in progress)
+            //Faker<UserProfile> fProfile = new();
 
             UserProfile profile = new()
             {
@@ -502,7 +503,8 @@ namespace TheFitnessApp.Data
 
         public static async Task<AppUser[]> GenerateTestUsersAsyncNew()
         {
-            Faker<AppUser> fUser = new();
+            // Use Bogus methods for massive seeding (work in progress)
+            //Faker<AppUser> fUser = new();
 
             AppUser[] users =
             [
